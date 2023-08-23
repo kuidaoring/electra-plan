@@ -1,17 +1,8 @@
 import React, { useState } from "react";
-import {
-  Checkbox,
-  Drawer,
-  Form,
-  Input,
-  Layout,
-  List,
-  Tag,
-  Typography,
-} from "antd";
-import { CalendarOutlined, FormOutlined } from "@ant-design/icons";
+import { Checkbox, Form, Input, Layout, List, Tag, Typography } from "antd";
 const { Content, Footer } = Layout;
 import { Task } from "../interfaces";
+import DetailDrawer from "../components/DetailDrawer";
 
 const { Text } = Typography;
 
@@ -47,6 +38,7 @@ const initialData: Array<Task> = [
 
 const ListPage: React.FC = () => {
   const [data, setData] = useState(initialData);
+  const [selectedIndex, setSelectedIndex] = useState(-1);
   const [drawerData, setDrawerData] = useState<Task>({
     title: "",
     dueDate: "",
@@ -65,6 +57,7 @@ const ListPage: React.FC = () => {
             <List.Item
               onClick={() => {
                 setDrawerData(item);
+                setSelectedIndex(index);
                 setDrawerOpen(true);
               }}
             >
@@ -119,36 +112,19 @@ const ListPage: React.FC = () => {
           </Form.Item>
         </Form>
       </Footer>
-      <Drawer
+      <DetailDrawer
+        task={drawerData}
         open={drawerOpen}
-        title={
-          <>
-            <Checkbox checked={drawerData.done} /> {drawerData.title}
-          </>
-        }
-        closable={false}
-        placement="right"
-        onClose={() => setDrawerOpen(false)}
-        width={300}
-      >
-        <List itemLayout="horizontal">
-          <List.Item>
-            <List.Item.Meta
-              avatar={<CalendarOutlined />}
-              title={drawerData.dueDate ?? ""}
-            ></List.Item.Meta>
-          </List.Item>
-          <List.Item>
-            <List.Item.Meta
-              avatar={<FormOutlined />}
-              title={drawerData.planDate ?? ""}
-            ></List.Item.Meta>
-          </List.Item>
-          <List.Item>
-            <Text editable={true}>{drawerData.description ?? ""}</Text>
-          </List.Item>
-        </List>
-      </Drawer>
+        onClose={() => {
+          setDrawerOpen(false);
+          setSelectedIndex(-1);
+        }}
+        onUpdateDescription={(description) => {
+          const newData = data.slice();
+          newData[selectedIndex].description = description;
+          setData(newData);
+        }}
+      ></DetailDrawer>
     </Layout>
   );
 };
