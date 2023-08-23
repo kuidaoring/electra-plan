@@ -6,19 +6,14 @@ import {
   Input,
   Layout,
   List,
-  Space,
   Tag,
   Typography,
 } from "antd";
-import { Content, Footer, Header } from "antd/es/layout/layout";
+import { CalendarOutlined, FormOutlined } from "@ant-design/icons";
+import { Content, Footer } from "antd/es/layout/layout";
+import { Task } from "../interfaces";
 
 const { Text } = Typography;
-
-type Task = {
-  title: string;
-  dueDate: string;
-  done: boolean;
-};
 
 const initialData: Array<Task> = [
   {
@@ -36,6 +31,17 @@ const initialData: Array<Task> = [
       "Electraという単語は、電気やエネルギーと関連づけられることがあります。そのため、この名前は効率的な計画やタスクの管理を意味し、エネルギーを活用して作業を進めることを強調するかもしれません。",
     dueDate: "2023-08-18",
     done: true,
+    description: `
+    Electraの要素： "Electra"という単語は、電気やエネルギーと関連づけられることがあります。そのため、この名前は効率的な計画やタスクの管理を意味し、エネルギーを活用して作業を進めることを強調するかもしれません。
+
+    計画と組織： "Plan"は計画や組織を指す言葉です。ElectraPlanという名前は、ユーザーがタスクやプロジェクトを効果的に計画し、整理するためのツールであることを示唆しています。
+    
+    高度な機能と技術： "Electra"の部分が、高度な技術や機能性を意味することもあります。したがって、この名前は高度な機能や技術を備えたTODOリストアプリであることを表現しているかもしれません。
+    
+    モダンさと進化： "Electra"はモダンで進化的なイメージも持っています。これにより、ElectraPlanは新しいアプローチや使いやすいインターフェースを提供する、モダンなTODOリストアプリを暗示するかもしれません。
+    
+    総じて、"ElectraPlan"はエネルギーや効率性、計画、高度な機能、進化などの要素を結びつけた名前と言えるでしょう。ただし、名前の解釈は主観的であり、ユーザーにどのような印象を与えるかは実際のブランディングやデザインとも関連します。
+    `,
   },
 ];
 
@@ -45,6 +51,7 @@ const ListPage: React.FC = () => {
     title: "",
     dueDate: "",
     done: false,
+    description: "",
   });
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [form] = Form.useForm();
@@ -114,16 +121,33 @@ const ListPage: React.FC = () => {
       </Footer>
       <Drawer
         open={drawerOpen}
-        title={drawerData.title}
+        title={
+          <>
+            <Checkbox checked={drawerData.done} /> {drawerData.title}
+          </>
+        }
+        closable={false}
         placement="right"
         onClose={() => setDrawerOpen(false)}
         width={300}
       >
-        <p>
-          <Tag color="blue">Plan:{drawerData.dueDate}</Tag>
-          <Tag color="magenta">Due:{drawerData.dueDate}</Tag>
-        </p>
-        <p>{drawerData.dueDate}</p>
+        <List itemLayout="horizontal">
+          <List.Item>
+            <List.Item.Meta
+              avatar={<CalendarOutlined />}
+              title={drawerData.dueDate ?? ""}
+            ></List.Item.Meta>
+          </List.Item>
+          <List.Item>
+            <List.Item.Meta
+              avatar={<FormOutlined />}
+              title={drawerData.planDate ?? ""}
+            ></List.Item.Meta>
+          </List.Item>
+          <List.Item>
+            <Text editable={true}>{drawerData.description ?? ""}</Text>
+          </List.Item>
+        </List>
       </Drawer>
     </Layout>
   );
