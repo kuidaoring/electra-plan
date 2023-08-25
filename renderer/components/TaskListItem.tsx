@@ -1,33 +1,46 @@
 import { Checkbox, List, Tag, Typography } from "antd";
 import { PrimitiveAtom, useAtom, useSetAtom } from "jotai";
 import { Task } from "../interfaces";
-import { DrawerOpenAtom, DrawerTaskAtom } from "../atoms/atoms";
+import { DrawerOpenAtom, SelectedTaskAtomsAtom } from "../atoms/atoms";
 const { Text } = Typography;
 
 type Props = {
   atom: PrimitiveAtom<Task>;
+  filter: "completed" | "incompleted";
 };
 
-const TaskListItem = ({ atom }: Props) => {
+const TaskListItem = ({ atom, filter }: Props) => {
   const [task, setTask] = useAtom(atom);
-  const setDrawerTask = useSetAtom(DrawerTaskAtom);
+  const setSelectedTaskAtom = useSetAtom(SelectedTaskAtomsAtom);
   const setDrawerOpen = useSetAtom(DrawerOpenAtom);
   const toggleDone = () => {
     setTask((prev) => {
-      return { ...prev, done: !prev.done };
+      return { ...prev, completed: !prev.completed };
     });
   };
+  if (filter === "completed" && !task.completed) {
+    return null;
+  }
+  if (filter === "incompleted" && task.completed) {
+    return null;
+  }
   return (
     <List.Item
-      onClick={() => {
+      onClick={(e) => {
         setDrawerOpen(true);
-        setDrawerTask(task);
+        setSelectedTaskAtom(atom);
       }}
     >
       <List.Item.Meta
-        avatar={<Checkbox checked={task.done} onChange={toggleDone} />}
+        avatar={
+          <Checkbox
+            checked={task.completed}
+            onChange={toggleDone}
+            onClick={(e) => e.stopPropagation()}
+          />
+        }
         title={
-          task.done ? (
+          task.completed ? (
             <Text delete>{task.title}</Text>
           ) : (
             <Text>{task.title}</Text>

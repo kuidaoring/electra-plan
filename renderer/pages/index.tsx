@@ -12,7 +12,8 @@ const ListPage: React.FC = () => {
   return (
     <Layout style={{ minHeight: "100vh" }}>
       <Content style={{ margin: "10px" }}>
-        <TaskList />
+        <TaskList filter="incompleted" />
+        <TaskList filter="completed" />
       </Content>
       <Footer
         style={{

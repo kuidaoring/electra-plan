@@ -1,21 +1,28 @@
 import { CalendarOutlined, FormOutlined } from "@ant-design/icons";
 import { Checkbox, Drawer, List, Typography } from "antd";
-import { DrawerOpenAtom, DrawerTaskAtom } from "../atoms/atoms";
+import { DrawerOpenAtom, SelectedTaskAtomsAtom } from "../atoms/atoms";
 import { useAtom, useAtomValue } from "jotai";
 const { Text } = Typography;
 
 const DetailDrawer: React.FC = () => {
   const [drawerOpen, setDrawerOpen] = useAtom(DrawerOpenAtom);
-  const task = useAtomValue(DrawerTaskAtom);
+  const taskAtom = useAtomValue(SelectedTaskAtomsAtom);
+  const [task, setTask] = useAtom(taskAtom);
   const onClose = () => {
     setDrawerOpen(false);
+  };
+  const toggleDone = () => {
+    setTask((prev) => {
+      return { ...prev, completed: !prev.completed };
+    });
   };
   return (
     <Drawer
       open={drawerOpen}
       title={
         <>
-          <Checkbox checked={task.done} /> {task.title}
+          <Checkbox checked={task.completed} onChange={toggleDone} />{" "}
+          {task.title}
         </>
       }
       closable={false}

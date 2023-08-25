@@ -1,4 +1,4 @@
-import { atom, useSetAtom } from "jotai";
+import { PrimitiveAtom, atom, useSetAtom } from "jotai";
 import { splitAtom } from "jotai/utils";
 import { Task } from "../interfaces";
 
@@ -6,18 +6,18 @@ const initialTaskList: Array<Task> = [
   {
     title: "hoge_atom",
     dueDate: "2023-08-19",
-    done: false,
+    completed: false,
   },
   {
     title: "2件目_atom",
     dueDate: "2023-08-18",
-    done: true,
+    completed: true,
   },
   {
     title:
       "Electraという単語は、電気やエネルギーと関連づけられることがあります。そのため、この名前は効率的な計画やタスクの管理を意味し、エネルギーを活用して作業を進めることを強調するかもしれません。",
     dueDate: "2023-08-18",
-    done: true,
+    completed: true,
     description: `
     Electraの要素： "Electra"という単語は、電気やエネルギーと関連づけられることがあります。そのため、この名前は効率的な計画やタスクの管理を意味し、エネルギーを活用して作業を進めることを強調するかもしれません。
 
@@ -35,4 +35,6 @@ export const TaskListAtom = atom(initialTaskList);
 // export const TaskListAtom = atom<Task[]>([]);
 export const TaskAtomsAtom = splitAtom(TaskListAtom);
 export const DrawerOpenAtom = atom(false);
-export const DrawerTaskAtom = atom<Task>({ title: "dummy", done: false });
+export const SelectedTaskAtomsAtom = atom<PrimitiveAtom<Task>>(
+  atom<Task>({ title: "dummy", completed: false })
+);

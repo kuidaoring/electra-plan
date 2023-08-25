@@ -1,21 +1,29 @@
-import { List } from "antd";
+import { List, Typography } from "antd";
+const { Title } = Typography;
 import { Task } from "../interfaces";
 import React, { ReactNode } from "react";
-import { PrimitiveAtom, useAtom } from "jotai";
+import { PrimitiveAtom, useAtom, useAtomValue } from "jotai";
 import { TaskAtomsAtom } from "../atoms/atoms";
 import TaskListItem from "./TaskListItem";
 
-const TaskList: React.FC = () => {
+type Props = {
+  filter: "completed" | "incompleted";
+};
+
+const TaskList: React.FC<Props> = ({ filter }) => {
   const [taskList] = useAtom(TaskAtomsAtom);
   const renderItem = (atom: PrimitiveAtom<Task>, index: number): ReactNode => {
-    return <TaskListItem atom={atom} />;
+    return <TaskListItem atom={atom} filter={filter} />;
   };
   return (
-    <List
-      itemLayout="horizontal"
-      dataSource={taskList}
-      renderItem={renderItem}
-    />
+    <>
+      {filter === "completed" && <Title>完了済み</Title>}
+      <List
+        itemLayout="horizontal"
+        dataSource={taskList}
+        renderItem={renderItem}
+      />
+    </>
   );
 };
 

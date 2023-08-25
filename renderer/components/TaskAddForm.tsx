@@ -13,7 +13,7 @@ const TaskAddForm = () => {
           {
             title: values.todo,
             dueDate: "2023-08-19",
-            done: false,
+            completed: false,
           },
           ...taskList,
         ]);
