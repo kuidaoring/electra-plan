@@ -1,24 +1,18 @@
 import { CalendarOutlined, FormOutlined } from "@ant-design/icons";
 import { Checkbox, Drawer, List, Typography } from "antd";
-import { Task } from "../interfaces";
+import { DrawerOpenAtom, DrawerTaskAtom } from "../atoms/atoms";
+import { useAtom, useAtomValue } from "jotai";
 const { Text } = Typography;
 
-type Props = {
-  task: Task;
-  open: boolean;
-  onClose: () => void;
-  onUpdateDescription: (description: string) => void;
-};
-
-const DetailDrawer: React.FC<Props> = ({
-  task,
-  open,
-  onClose,
-  onUpdateDescription,
-}) => {
+const DetailDrawer: React.FC = () => {
+  const [drawerOpen, setDrawerOpen] = useAtom(DrawerOpenAtom);
+  const task = useAtomValue(DrawerTaskAtom);
+  const onClose = () => {
+    setDrawerOpen(false);
+  };
   return (
     <Drawer
-      open={open}
+      open={drawerOpen}
       title={
         <>
           <Checkbox checked={task.done} /> {task.title}
@@ -43,13 +37,7 @@ const DetailDrawer: React.FC<Props> = ({
           ></List.Item.Meta>
         </List.Item>
         <List.Item>
-          <Text
-            editable={{
-              onChange: onUpdateDescription,
-            }}
-          >
-            {task.description}
-          </Text>
+          <Text>{task.description}</Text>
         </List.Item>
       </List>
     </Drawer>
