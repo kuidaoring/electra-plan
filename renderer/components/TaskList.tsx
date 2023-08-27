@@ -1,5 +1,4 @@
-import { Empty, List, Tag, Typography } from "antd";
-const { Title } = Typography;
+import { Empty, List, Tag } from "antd";
 import { Task } from "../interfaces";
 import React, { ReactNode } from "react";
 import { PrimitiveAtom, useAtom, useAtomValue } from "jotai";
@@ -36,7 +35,13 @@ const TaskList: React.FC<Props> = ({ filter }) => {
       itemLayout="horizontal"
       dataSource={filteredTaskList}
       renderItem={renderItem}
-      header={filter === "completed" ? <Tag>完了済み</Tag> : <Tag>未完了</Tag>}
+      header={
+        filter === "completed" ? (
+          <Tag color="blue-inverse">完了済み</Tag>
+        ) : (
+          <Tag color="volcano-inverse">未完了</Tag>
+        )
+      }
       bordered={true}
       rowKey={(item) => item.task.id}
     />
