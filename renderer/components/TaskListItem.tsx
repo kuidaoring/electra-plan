@@ -6,10 +6,9 @@ const { Text } = Typography;
 
 type Props = {
   atom: PrimitiveAtom<Task>;
-  filter: "completed" | "incompleted";
 };
 
-const TaskListItem = ({ atom, filter }: Props) => {
+const TaskListItem = ({ atom }: Props) => {
   const [task, setTask] = useAtom(atom);
   const setSelectedId = useSetAtom(SelectedIdAtom);
   const setDrawerOpen = useSetAtom(DrawerOpenAtom);
@@ -18,16 +17,9 @@ const TaskListItem = ({ atom, filter }: Props) => {
       return { ...prev, completed: !prev.completed };
     });
   };
-  if (filter === "completed" && !task.completed) {
-    return null;
-  }
-  if (filter === "incompleted" && task.completed) {
-    return null;
-  }
   return (
     <List.Item
-      key={task.id}
-      onClick={(e) => {
+      onClick={() => {
         setDrawerOpen(true);
         setSelectedId(task.id);
       }}
