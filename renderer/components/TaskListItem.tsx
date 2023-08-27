@@ -1,7 +1,7 @@
 import { Checkbox, List, Tag, Typography } from "antd";
 import { PrimitiveAtom, useAtom, useSetAtom } from "jotai";
 import { Task } from "../interfaces";
-import { DrawerOpenAtom, SelectedTaskAtomsAtom } from "../atoms/atoms";
+import { DrawerOpenAtom, SelectedIdAtom } from "../atoms/atoms";
 const { Text } = Typography;
 
 type Props = {
@@ -11,7 +11,7 @@ type Props = {
 
 const TaskListItem = ({ atom, filter }: Props) => {
   const [task, setTask] = useAtom(atom);
-  const setSelectedTaskAtom = useSetAtom(SelectedTaskAtomsAtom);
+  const setSelectedId = useSetAtom(SelectedIdAtom);
   const setDrawerOpen = useSetAtom(DrawerOpenAtom);
   const toggleDone = () => {
     setTask((prev) => {
@@ -26,9 +26,10 @@ const TaskListItem = ({ atom, filter }: Props) => {
   }
   return (
     <List.Item
+      key={task.id}
       onClick={(e) => {
         setDrawerOpen(true);
-        setSelectedTaskAtom(atom);
+        setSelectedId(task.id);
       }}
     >
       <List.Item.Meta

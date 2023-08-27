@@ -1,6 +1,7 @@
 import { Form, Input } from "antd";
 import { useAtom } from "jotai";
 import { TaskListAtom } from "../atoms/atoms";
+import { nanoid } from "nanoid";
 
 const TaskAddForm = () => {
   const [taskList, setTaskList] = useAtom(TaskListAtom);
@@ -11,6 +12,7 @@ const TaskAddForm = () => {
       onFinish={(values) => {
         setTaskList([
           {
+            id: nanoid(),
             title: values.todo,
             dueDate: "2023-08-19",
             completed: false,
