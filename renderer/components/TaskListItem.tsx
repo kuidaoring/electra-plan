@@ -2,6 +2,7 @@ import { Checkbox, List, Tag, Typography } from "antd";
 import { PrimitiveAtom, useAtom, useSetAtom } from "jotai";
 import { Task } from "../interfaces";
 import { DrawerOpenAtom, SelectedIdAtom } from "../atoms/atoms";
+import "dayjs/locale/ja";
 const { Text } = Typography;
 
 type Props = {
@@ -39,10 +40,17 @@ const TaskListItem = ({ atom }: Props) => {
             <Text>{task.title}</Text>
           )
         }
-        description={task.dueDate}
       />
-      <Tag color="blue">Plan:{task.dueDate}</Tag>
-      <Tag color="magenta">Due:{task.dueDate}</Tag>
+      {task.planDate && (
+        <Tag color="blue">
+          予定日:{task.planDate.locale("ja").format("M/DD(ddd)")}
+        </Tag>
+      )}
+      {task.dueDate && (
+        <Tag color="magenta">
+          期限日:{task.dueDate.locale("ja").format("M/DD(ddd)")}
+        </Tag>
+      )}
     </List.Item>
   );
 };

@@ -36,13 +36,19 @@ const DetailDrawer: React.FC = () => {
         <List.Item>
           <List.Item.Meta
             avatar={<CalendarOutlined />}
-            title={task.dueDate ?? ""}
+            title={
+              task.dueDate ? task.dueDate.locale("ja").format("M/DD(ddd)") : ""
+            }
           ></List.Item.Meta>
         </List.Item>
         <List.Item>
           <List.Item.Meta
             avatar={<FormOutlined />}
-            title={task.planDate ?? ""}
+            title={
+              task.planDate
+                ? task.planDate.locale("ja").format("M/DD(ddd)")
+                : ""
+            }
           ></List.Item.Meta>
         </List.Item>
         <List.Item>
