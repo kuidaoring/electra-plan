@@ -3,9 +3,10 @@ import { useAtom } from "jotai";
 import { TaskListAtom } from "../atoms/atoms";
 import { nanoid } from "nanoid";
 import { Dayjs } from "dayjs";
+import { ChangeEvent, useState } from "react";
 
 type FormValue = {
-  todo: string;
+  title: string;
   dueDate?: Dayjs;
   planDate?: Dayjs;
 };
@@ -13,6 +14,12 @@ type FormValue = {
 const TaskAddForm = () => {
   const [taskList, setTaskList] = useAtom(TaskListAtom);
   const [form] = Form.useForm();
+  const [submittable, setSubmittable] = useState(false);
+
+  const validateForm = (title: string): void => {
+    setSubmittable(!!title && !!title.match(/\S/g));
+  };
+
   return (
     <Form
       form={form}
@@ -20,7 +27,7 @@ const TaskAddForm = () => {
         setTaskList([
           {
             id: nanoid(),
-            title: values.todo,
+            title: values.title.trim(),
             dueDate: values.dueDate,
             planDate: values.planDate,
             completed: false,
@@ -28,11 +35,16 @@ const TaskAddForm = () => {
           ...taskList,
         ]);
         form.resetFields();
+        setSubmittable(false);
       }}
     >
-      <Space.Compact block={true}>
-        <Form.Item name="todo">
-          <Input />
+      <Space.Compact block>
+        <Form.Item name="title">
+          <Input
+            onChange={(e: ChangeEvent<HTMLInputElement>) =>
+              validateForm(e.target.value)
+            }
+          />
         </Form.Item>
         <Form.Item name="planDate">
           <DatePicker placeholder="予定日" format="M/DD(ddd)" />
@@ -41,7 +53,7 @@ const TaskAddForm = () => {
           <DatePicker placeholder="期限日" format="M/DD(ddd)" />
         </Form.Item>
         <Form.Item>
-          <Button type="primary" htmlType="submit">
+          <Button type="primary" htmlType="submit" disabled={!submittable}>
             登録
           </Button>
         </Form.Item>
