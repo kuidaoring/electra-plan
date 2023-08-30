@@ -1,10 +1,9 @@
-import { Button, Form, Input, Space } from "antd";
+import { Button, DatePicker, Form, Input, Space } from "antd";
 import { useAtom } from "jotai";
 import { TaskListAtom } from "../atoms/atoms";
 import { nanoid } from "nanoid";
 import { Dayjs } from "dayjs";
 import { ChangeEvent, useState } from "react";
-import TaskDatePicker from "./TaskDatePicker";
 import { CalendarOutlined, FormOutlined } from "@ant-design/icons";
 
 type FormValue = {
@@ -49,12 +48,17 @@ const TaskAddForm = () => {
           />
         </Form.Item>
         <Form.Item name="planDate">
-          <TaskDatePicker placeholder="予定日を設定" icon={<FormOutlined />} />
+          <DatePicker
+            placeholder="予定日を設定"
+            suffixIcon={<FormOutlined />}
+            format="M/D(ddd)"
+          />
         </Form.Item>
         <Form.Item name="dueDate">
-          <TaskDatePicker
+          <DatePicker
             placeholder="期限日を設定"
-            icon={<CalendarOutlined />}
+            suffixIcon={<CalendarOutlined />}
+            format="M/D(ddd)"
           />
         </Form.Item>
         <Form.Item>

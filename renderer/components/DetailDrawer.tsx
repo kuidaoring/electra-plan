@@ -1,8 +1,7 @@
 import { CalendarOutlined, FormOutlined } from "@ant-design/icons";
-import { Checkbox, Drawer, List, Typography } from "antd";
+import { Checkbox, DatePicker, Drawer, List, Typography } from "antd";
 import { DrawerOpenAtom, SelectedTaskAtom } from "../atoms/atoms";
 import { useAtom } from "jotai";
-import TaskDatePicker from "./TaskDatePicker";
 const { Text } = Typography;
 
 const DetailDrawer: React.FC = () => {
@@ -48,10 +47,13 @@ const DetailDrawer: React.FC = () => {
           <List.Item.Meta
             avatar={<FormOutlined />}
             title={
-              <TaskDatePicker
+              <DatePicker
+                bordered={false}
+                suffixIcon={null}
                 placeholder="予定日を設定"
                 value={task.planDate}
                 onChange={onPlanDateChange}
+                format="M/D(ddd)"
               />
             }
           ></List.Item.Meta>
@@ -60,10 +62,13 @@ const DetailDrawer: React.FC = () => {
           <List.Item.Meta
             avatar={<CalendarOutlined />}
             title={
-              <TaskDatePicker
+              <DatePicker
+                bordered={false}
+                suffixIcon={null}
                 placeholder="期限日を設定"
                 value={task.dueDate}
                 onChange={onDueDateChange}
+                format="M/D(ddd)"
               />
             }
           />
