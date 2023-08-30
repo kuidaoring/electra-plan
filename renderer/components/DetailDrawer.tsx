@@ -1,7 +1,8 @@
 import { CalendarOutlined, FormOutlined } from "@ant-design/icons";
 import { Checkbox, Drawer, List, Typography } from "antd";
 import { DrawerOpenAtom, SelectedTaskAtom } from "../atoms/atoms";
-import { useAtom, useAtomValue } from "jotai";
+import { useAtom } from "jotai";
+import TaskDatePicker from "./TaskDatePicker";
 const { Text } = Typography;
 
 const DetailDrawer: React.FC = () => {
@@ -16,6 +17,16 @@ const DetailDrawer: React.FC = () => {
   const toggleDone = () => {
     setTask((prev) => {
       return { ...prev, completed: !prev.completed };
+    });
+  };
+  const onDueDateChange = (nextDueDate) => {
+    setTask((prev) => {
+      return { ...prev, dueDate: nextDueDate };
+    });
+  };
+  const onPlanDateChange = (nextPlanDate) => {
+    setTask((prev) => {
+      return { ...prev, planDate: nextPlanDate };
     });
   };
   return (
@@ -35,21 +46,27 @@ const DetailDrawer: React.FC = () => {
       <List itemLayout="horizontal">
         <List.Item>
           <List.Item.Meta
-            avatar={<CalendarOutlined />}
+            avatar={<FormOutlined />}
             title={
-              task.dueDate ? task.dueDate.locale("ja").format("M/DD(ddd)") : ""
+              <TaskDatePicker
+                placeholder="予定日を設定"
+                value={task.planDate}
+                onChange={onPlanDateChange}
+              />
             }
           ></List.Item.Meta>
         </List.Item>
         <List.Item>
           <List.Item.Meta
-            avatar={<FormOutlined />}
+            avatar={<CalendarOutlined />}
             title={
-              task.planDate
-                ? task.planDate.locale("ja").format("M/DD(ddd)")
-                : ""
+              <TaskDatePicker
+                placeholder="期限日を設定"
+                value={task.dueDate}
+                onChange={onDueDateChange}
+              />
             }
-          ></List.Item.Meta>
+          />
         </List.Item>
         <List.Item>
           <Text>{task.description}</Text>

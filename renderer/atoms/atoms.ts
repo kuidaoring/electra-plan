@@ -1,4 +1,4 @@
-import { PrimitiveAtom, atom, useSetAtom } from "jotai";
+import { atom } from "jotai";
 import { splitAtom } from "jotai/utils";
 import { Task } from "../interfaces";
 import { nanoid } from "nanoid";
@@ -8,6 +8,7 @@ const initialTaskList: Array<Task> = [
   {
     id: nanoid(),
     title: "hoge_atom",
+    planDate: dayjs("2023-08-09"),
     dueDate: dayjs("2023-08-19"),
     completed: false,
   },

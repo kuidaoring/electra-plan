@@ -45,12 +45,12 @@ const TaskListItem = ({ atom }: Props) => {
       <Space direction="vertical">
         {task.planDate && (
           <Tag color="blue" icon={<FormOutlined />}>
-            {task.planDate.locale("ja").format("M/DD(ddd)")}
+            {task.planDate.locale("ja").format("M/D(ddd)")}
           </Tag>
         )}
         {task.dueDate && (
           <Tag color="magenta" icon={<CalendarOutlined />}>
-            {task.dueDate.locale("ja").format("M/DD(ddd)")}
+            {task.dueDate.locale("ja").format("M/D(ddd)")}
           </Tag>
         )}
       </Space>
