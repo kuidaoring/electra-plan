@@ -1,4 +1,5 @@
 import React from "react";
+import "ress";
 import { ConfigProvider, Layout, Space } from "antd";
 const { Content, Footer } = Layout;
 import DetailDrawer from "../components/DetailDrawer";

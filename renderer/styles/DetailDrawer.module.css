@@ -1,0 +1,19 @@
+.editorContainer {
+  position: relative;
+  padding: 0px;
+  min-height: 240px;
+  width: 100%;
+}
+
+.contentEditable {
+  outline: none;
+}
+
+.placeholder {
+  position: absolute;
+  color: #888888;
+  top: 0px;
+  left: 0px;
+  pointer-events: none;
+  user-select: none;
+}

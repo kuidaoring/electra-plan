@@ -1,8 +1,30 @@
 import { CalendarOutlined, FormOutlined } from "@ant-design/icons";
-import { Checkbox, DatePicker, Drawer, List, Typography } from "antd";
+import { Checkbox, DatePicker, Drawer, List } from "antd";
 import { DrawerOpenAtom, SelectedTaskAtom } from "../atoms/atoms";
 import { useAtom } from "jotai";
-const { Text } = Typography;
+import { useEffect } from "react";
+import { LexicalComposer } from "@lexical/react/LexicalComposer";
+import { useLexicalComposerContext } from "@lexical/react/LexicalComposerContext";
+import { PlainTextPlugin } from "@lexical/react/LexicalPlainTextPlugin";
+import { OnChangePlugin } from "@lexical/react/LexicalOnChangePlugin";
+import { ContentEditable } from "@lexical/react/LexicalContentEditable";
+import LexicalErrorBoundary from "@lexical/react/LexicalErrorBoundary";
+import { $getRoot } from "lexical";
+
+import styles from "../styles/DetailDrawer.module.css";
+
+const SetInitialValuePlugin = ({ id, editorState }) => {
+  const [editor] = useLexicalComposerContext();
+  useEffect(() => {
+    editor.update(() => {
+      $getRoot().clear();
+    });
+    if (editorState) {
+      editor.setEditorState(editorState);
+    }
+  }, [editor, id]);
+  return null;
+};
 
 const DetailDrawer: React.FC = () => {
   const [drawerOpen, setDrawerOpen] = useAtom(DrawerOpenAtom);
@@ -26,6 +48,11 @@ const DetailDrawer: React.FC = () => {
   const onPlanDateChange = (nextPlanDate) => {
     setTask((prev) => {
       return { ...prev, planDate: nextPlanDate };
+    });
+  };
+  const onDescriptionChange = (editorState) => {
+    setTask((prev) => {
+      return { ...prev, description: editorState };
     });
   };
   return (
@@ -74,7 +101,29 @@ const DetailDrawer: React.FC = () => {
           />
         </List.Item>
         <List.Item>
-          <Text>{task.description}</Text>
+          <div className={styles.editorContainer}>
+            <LexicalComposer
+              initialConfig={{
+                namespace: "DetailDrawer",
+                onError: (error) => console.log(error),
+              }}
+            >
+              <PlainTextPlugin
+                contentEditable={
+                  <ContentEditable className={styles.contentEditable} />
+                }
+                placeholder={
+                  <div className={styles.placeholder}>説明文を追加</div>
+                }
+                ErrorBoundary={LexicalErrorBoundary}
+              />
+              <OnChangePlugin onChange={onDescriptionChange} />
+              <SetInitialValuePlugin
+                id={task.id}
+                editorState={task.description}
+              />
+            </LexicalComposer>
+          </div>
         </List.Item>
       </List>
     </Drawer>
