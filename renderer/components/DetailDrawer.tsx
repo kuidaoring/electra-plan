@@ -7,6 +7,7 @@ import { LexicalComposer } from "@lexical/react/LexicalComposer";
 import { useLexicalComposerContext } from "@lexical/react/LexicalComposerContext";
 import { PlainTextPlugin } from "@lexical/react/LexicalPlainTextPlugin";
 import { OnChangePlugin } from "@lexical/react/LexicalOnChangePlugin";
+import { HistoryPlugin } from "@lexical/react/LexicalHistoryPlugin";
 import { ContentEditable } from "@lexical/react/LexicalContentEditable";
 import LexicalErrorBoundary from "@lexical/react/LexicalErrorBoundary";
 import { $getRoot } from "lexical";
@@ -126,6 +127,7 @@ const DetailDrawer: React.FC = () => {
                 ErrorBoundary={LexicalErrorBoundary}
               />
               <OnChangePlugin onChange={onDescriptionChange} />
+              <HistoryPlugin />
               <SetInitialValuePlugin
                 id={task.id}
                 editorState={task.description}
