@@ -11,12 +11,14 @@ const initialTaskList: Array<Task> = [
     planDate: dayjs("2023-08-09"),
     dueDate: dayjs("2023-08-19"),
     completed: false,
+    hasDescription: false,
   },
   {
     id: nanoid(),
     title: "2件目_atom",
     dueDate: dayjs("2023-08-18"),
     completed: true,
+    hasDescription: false,
   },
   {
     id: nanoid(),
@@ -24,6 +26,7 @@ const initialTaskList: Array<Task> = [
       "Electraという単語は、電気やエネルギーと関連づけられることがあります。そのため、この名前は効率的な計画やタスクの管理を意味し、エネルギーを活用して作業を進めることを強調するかもしれません。",
     dueDate: dayjs("2023-08-18"),
     completed: true,
+    hasDescription: false,
   },
 ];
 export const TaskListAtom = atom(initialTaskList);

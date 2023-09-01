@@ -28,4 +28,5 @@ export type Task = {
   planDate?: Dayjs;
   completed: boolean;
   description?: string;
+  hasDescription: boolean;
 };

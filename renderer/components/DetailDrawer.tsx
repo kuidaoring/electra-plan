@@ -10,6 +10,7 @@ import { OnChangePlugin } from "@lexical/react/LexicalOnChangePlugin";
 import { ContentEditable } from "@lexical/react/LexicalContentEditable";
 import LexicalErrorBoundary from "@lexical/react/LexicalErrorBoundary";
 import { $getRoot } from "lexical";
+import { $canShowPlaceholder } from "@lexical/text";
 
 import styles from "../styles/DetailDrawer.module.css";
 
@@ -51,8 +52,15 @@ const DetailDrawer: React.FC = () => {
     });
   };
   const onDescriptionChange = (editorState) => {
-    setTask((prev) => {
-      return { ...prev, description: editorState };
+    editorState.read(() => {
+      const hasDescprion = !$canShowPlaceholder(false);
+      setTask((prev) => {
+        return {
+          ...prev,
+          description: editorState,
+          hasDescription: hasDescprion,
+        };
+      });
     });
   };
   return (

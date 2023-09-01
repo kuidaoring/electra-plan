@@ -3,7 +3,11 @@ import { PrimitiveAtom, useAtom, useSetAtom } from "jotai";
 import { Task } from "../interfaces";
 import { DrawerOpenAtom, SelectedIdAtom } from "../atoms/atoms";
 import "dayjs/locale/ja";
-import { CalendarOutlined, FormOutlined } from "@ant-design/icons";
+import {
+  CalendarOutlined,
+  FileTextOutlined,
+  FormOutlined,
+} from "@ant-design/icons";
 const { Text } = Typography;
 
 type Props = {
@@ -51,6 +55,11 @@ const TaskListItem = ({ atom }: Props) => {
         {task.dueDate && (
           <Tag color="magenta" icon={<CalendarOutlined />}>
             {task.dueDate.locale("ja").format("M/D(ddd)")}
+          </Tag>
+        )}
+        {task.hasDescription && (
+          <Tag color="green" icon={<FileTextOutlined />}>
+            メモ
           </Tag>
         )}
       </Space>
