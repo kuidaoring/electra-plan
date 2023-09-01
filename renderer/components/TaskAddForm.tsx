@@ -42,6 +42,7 @@ const TaskAddForm = () => {
       <Space.Compact block>
         <Form.Item name="title">
           <Input
+            placeholder="タスクを追加"
             onChange={(e: ChangeEvent<HTMLInputElement>) =>
               validateForm(e.target.value)
             }
