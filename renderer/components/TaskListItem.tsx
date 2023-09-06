@@ -1,13 +1,9 @@
-import { Checkbox, List, Space, Tag, Typography } from "antd";
+import { Checkbox, List, Typography } from "antd";
 import { PrimitiveAtom, useAtom, useSetAtom } from "jotai";
 import { Task } from "../interfaces";
 import { DrawerOpenAtom, SelectedIdAtom } from "../atoms/atoms";
 import "dayjs/locale/ja";
-import {
-  CalendarOutlined,
-  FileTextOutlined,
-  FormOutlined,
-} from "@ant-design/icons";
+import TaskListItemMeta from "./TaskListItemMeta";
 const { Text } = Typography;
 
 type Props = {
@@ -45,24 +41,8 @@ const TaskListItem = ({ atom }: Props) => {
             <Text>{task.title}</Text>
           )
         }
+        description={<TaskListItemMeta task={task} />}
       />
-      <Space direction="vertical">
-        {task.planDate && (
-          <Tag color="blue" icon={<FormOutlined />}>
-            {task.planDate.locale("ja").format("M/D(ddd)")}
-          </Tag>
-        )}
-        {task.dueDate && (
-          <Tag color="magenta" icon={<CalendarOutlined />}>
-            {task.dueDate.locale("ja").format("M/D(ddd)")}
-          </Tag>
-        )}
-        {task.hasDescription && (
-          <Tag color="green" icon={<FileTextOutlined />}>
-            メモ
-          </Tag>
-        )}
-      </Space>
     </List.Item>
   );
 };
