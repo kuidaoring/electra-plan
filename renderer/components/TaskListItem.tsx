@@ -3,7 +3,6 @@ import { PrimitiveAtom, useAtom, useSetAtom } from "jotai";
 import { Task } from "../interfaces";
 import { DrawerOpenAtom, SelectedIdAtom } from "../atoms/atoms";
 import "dayjs/locale/ja";
-import TaskListItemMeta from "./TaskListItemMeta";
 const { Text } = Typography;
 
 type Props = {
