@@ -2,31 +2,20 @@ import { CalendarOutlined, FormOutlined } from "@ant-design/icons";
 import { Checkbox, DatePicker, Drawer, List } from "antd";
 import { DrawerOpenAtom, SelectedTaskAtom } from "../atoms/atoms";
 import { useAtom } from "jotai";
-import { useEffect } from "react";
 import { LexicalComposer } from "@lexical/react/LexicalComposer";
-import { useLexicalComposerContext } from "@lexical/react/LexicalComposerContext";
-import { PlainTextPlugin } from "@lexical/react/LexicalPlainTextPlugin";
+import { RichTextPlugin } from "@lexical/react/LexicalRichTextPlugin";
+import { LinkPlugin } from "@lexical/react/LexicalLinkPlugin";
+import { LinkNode, AutoLinkNode } from "@lexical/link";
 import { OnChangePlugin } from "@lexical/react/LexicalOnChangePlugin";
 import { HistoryPlugin } from "@lexical/react/LexicalHistoryPlugin";
 import { ContentEditable } from "@lexical/react/LexicalContentEditable";
 import LexicalErrorBoundary from "@lexical/react/LexicalErrorBoundary";
-import { $getRoot } from "lexical";
 import { $canShowPlaceholder } from "@lexical/text";
+import SetInitialValuePlugin from "./lexical/SetInitialValuePlugin";
+import LinkToolbarItem from "./lexical/LinkToolbarItem";
 
 import styles from "../styles/DetailDrawer.module.css";
-
-const SetInitialValuePlugin = ({ id, editorState }) => {
-  const [editor] = useLexicalComposerContext();
-  useEffect(() => {
-    editor.update(() => {
-      $getRoot().clear();
-    });
-    if (editorState) {
-      editor.setEditorState(editorState);
-    }
-  }, [editor, id]);
-  return null;
-};
+import ClickableLinkPlugin from "./lexical/ClickableLinkPlugin";
 
 const DetailDrawer: React.FC = () => {
   const [drawerOpen, setDrawerOpen] = useAtom(DrawerOpenAtom);
@@ -67,6 +56,7 @@ const DetailDrawer: React.FC = () => {
   return (
     <Drawer
       open={drawerOpen}
+      size="large"
       title={
         <>
           <Checkbox checked={task.completed} onChange={toggleDone} />{" "}
@@ -115,9 +105,11 @@ const DetailDrawer: React.FC = () => {
               initialConfig={{
                 namespace: "DetailDrawer",
                 onError: (error) => console.log(error),
+                nodes: [LinkNode, AutoLinkNode],
               }}
             >
-              <PlainTextPlugin
+              <LinkToolbarItem />
+              <RichTextPlugin
                 contentEditable={
                   <ContentEditable className={styles.contentEditable} />
                 }
@@ -126,12 +118,14 @@ const DetailDrawer: React.FC = () => {
                 }
                 ErrorBoundary={LexicalErrorBoundary}
               />
+              <LinkPlugin />
               <OnChangePlugin onChange={onDescriptionChange} />
               <HistoryPlugin />
               <SetInitialValuePlugin
                 id={task.id}
                 editorState={task.description}
               />
+              <ClickableLinkPlugin newTab={false} />
             </LexicalComposer>
           </div>
         </List.Item>

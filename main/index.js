@@ -11,30 +11,37 @@ const electron_1 = require("electron");
 const electron_is_dev_1 = __importDefault(require("electron-is-dev"));
 const electron_next_1 = __importDefault(require("electron-next"));
 // Prepare the renderer once the app is ready
-electron_1.app.on('ready', async () => {
-    await (0, electron_next_1.default)('./renderer');
+electron_1.app.on("ready", async () => {
+    await (0, electron_next_1.default)("./renderer");
     const mainWindow = new electron_1.BrowserWindow({
         width: 800,
         height: 600,
         webPreferences: {
             nodeIntegration: false,
             contextIsolation: false,
-            preload: (0, path_1.join)(__dirname, 'preload.js'),
+            preload: (0, path_1.join)(__dirname, "preload.js"),
         },
     });
+    const handleLinkClick = (details) => {
+        if (details.url.match(/^https?:/)) {
+            details.preventDefault();
+            electron_1.shell.openExternal(details.url);
+        }
+    };
+    mainWindow.webContents.on("will-navigate", handleLinkClick);
     const url = electron_is_dev_1.default
-        ? 'http://localhost:8000/'
+        ? "http://localhost:8000/"
         : (0, url_1.format)({
-            pathname: (0, path_1.join)(__dirname, '../renderer/out/index.html'),
-            protocol: 'file:',
+            pathname: (0, path_1.join)(__dirname, "../renderer/out/index.html"),
+            protocol: "file:",
             slashes: true,
         });
     mainWindow.loadURL(url);
 });
 // Quit the app once all windows are closed
-electron_1.app.on('window-all-closed', electron_1.app.quit);
+electron_1.app.on("window-all-closed", electron_1.app.quit);
 // listen the channel `message` and resend the received message to the renderer process
-electron_1.ipcMain.on('message', (event, message) => {
+electron_1.ipcMain.on("message", (event, message) => {
     console.log(message);
-    setTimeout(() => event.sender.send('message', 'hi from electron'), 500);
+    setTimeout(() => event.sender.send("message", "hi from electron"), 500);
 });
