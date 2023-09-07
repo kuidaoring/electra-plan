@@ -4,6 +4,7 @@ import { Task } from "../interfaces";
 import { DrawerOpenAtom, SelectedIdAtom } from "../atoms/atoms";
 import "dayjs/locale/ja";
 import TaskListItemMeta from "./TaskListItemMeta";
+import styles from "../styles/ListItem.module.css";
 const { Text } = Typography;
 
 type Props = {
@@ -25,6 +26,7 @@ const TaskListItem = ({ atom }: Props) => {
         setDrawerOpen(true);
         setSelectedId(task.id);
       }}
+      className={styles.listItem}
     >
       <List.Item.Meta
         avatar={
