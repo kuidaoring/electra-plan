@@ -1,7 +1,7 @@
 import { Empty, List, Tag } from "antd";
 import { Task } from "../interfaces";
 import React, { ReactNode } from "react";
-import { PrimitiveAtom, useAtom, useAtomValue } from "jotai";
+import { PrimitiveAtom, useAtomValue } from "jotai";
 import { TaskAtomsAtom, TaskListAtom } from "../atoms/atoms";
 import TaskListItem from "./TaskListItem";
 

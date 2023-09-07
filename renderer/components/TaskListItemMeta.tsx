@@ -1,4 +1,4 @@
-import { Tag } from "antd";
+import { Divider, Space } from "antd";
 import { Task } from "../interfaces";
 import {
   CalendarOutlined,
@@ -15,23 +15,26 @@ const TaskListItemMeta: React.FC<Props> = ({ task }) => {
     return null;
   }
   return (
-    <>
+    <Space split={<Divider type="vertical" />}>
       {task.planDate && (
-        <Tag color="blue" icon={<FormOutlined />}>
+        <Space>
+          <FormOutlined />
           {task.planDate.locale("ja").format("M/D(ddd)")}
-        </Tag>
+        </Space>
       )}
       {task.dueDate && (
-        <Tag color="magenta" icon={<CalendarOutlined />}>
+        <Space>
+          <CalendarOutlined />
           {task.dueDate.locale("ja").format("M/D(ddd)")}
-        </Tag>
+        </Space>
       )}
       {task.hasDescription && (
-        <Tag color="green" icon={<FileTextOutlined />}>
+        <Space>
+          {<FileTextOutlined />}
           メモ
-        </Tag>
+        </Space>
       )}
-    </>
+    </Space>
   );
 };
 export default TaskListItemMeta;
