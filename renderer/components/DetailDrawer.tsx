@@ -1,5 +1,13 @@
 import { CalendarOutlined, FormOutlined } from "@ant-design/icons";
-import { Checkbox, DatePicker, Drawer, List } from "antd";
+import {
+  Checkbox,
+  DatePicker,
+  Drawer,
+  Input,
+  InputRef,
+  List,
+  Space,
+} from "antd";
 import { DrawerOpenAtom, SelectedTaskAtom } from "../atoms/atoms";
 import { useAtom } from "jotai";
 import { LexicalComposer } from "@lexical/react/LexicalComposer";
@@ -16,10 +24,12 @@ import LinkToolbarItem from "./lexical/LinkToolbarItem";
 
 import styles from "../styles/DetailDrawer.module.css";
 import ClickableLinkPlugin from "./lexical/ClickableLinkPlugin";
+import { useRef } from "react";
 
 const DetailDrawer: React.FC = () => {
   const [drawerOpen, setDrawerOpen] = useAtom(DrawerOpenAtom);
   const [task, setTask] = useAtom(SelectedTaskAtom);
+  const titleInputRef = useRef<InputRef>(null);
   if (!task) {
     return;
   }
@@ -29,6 +39,11 @@ const DetailDrawer: React.FC = () => {
   const toggleDone = () => {
     setTask((prev) => {
       return { ...prev, completed: !prev.completed };
+    });
+  };
+  const onTitleChange = (event) => {
+    setTask((prev) => {
+      return { ...prev, title: event.currentTarget.value };
     });
   };
   const onDueDateChange = (nextDueDate) => {
@@ -58,10 +73,20 @@ const DetailDrawer: React.FC = () => {
       open={drawerOpen}
       size="large"
       title={
-        <>
-          <Checkbox checked={task.completed} onChange={toggleDone} />{" "}
-          {task.title}
-        </>
+        <Space>
+          <Checkbox checked={task.completed} onChange={toggleDone} />
+          <Input.TextArea
+            bordered={false}
+            value={task.title}
+            autoSize
+            onChange={onTitleChange}
+            onPressEnter={(e) => {
+              e.preventDefault();
+              titleInputRef.current.blur();
+            }}
+            ref={titleInputRef}
+          />
+        </Space>
       }
       closable={false}
       placement="right"
