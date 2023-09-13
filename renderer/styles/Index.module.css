@@ -1,0 +1,26 @@
+.pageLayout {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: row;
+}
+
+.listLayout {
+  height: 100vh;
+  flex: 1;
+}
+
+.taskAddContent {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+.listContent {
+  margin: 10px;
+  overflow: scroll;
+}
+
+.detailContent {
+  height: 100vh;
+  flex: 1;
+}

@@ -1,15 +1,20 @@
-import { CalendarOutlined, FormOutlined } from "@ant-design/icons";
 import {
+  CalendarOutlined,
+  CloseOutlined,
+  FormOutlined,
+} from "@ant-design/icons";
+import {
+  Button,
   Checkbox,
   DatePicker,
-  Drawer,
+  Empty,
   Input,
   InputRef,
   List,
   Space,
 } from "antd";
 import { DrawerOpenAtom, SelectedTaskAtom } from "../atoms/atoms";
-import { useAtom } from "jotai";
+import { useAtom, useSetAtom } from "jotai";
 import { LexicalComposer } from "@lexical/react/LexicalComposer";
 import { RichTextPlugin } from "@lexical/react/LexicalRichTextPlugin";
 import { LinkPlugin } from "@lexical/react/LexicalLinkPlugin";
@@ -27,11 +32,15 @@ import ClickableLinkPlugin from "./lexical/ClickableLinkPlugin";
 import { useRef } from "react";
 
 const DetailDrawer: React.FC = () => {
-  const [drawerOpen, setDrawerOpen] = useAtom(DrawerOpenAtom);
+  const setDrawerOpen = useSetAtom(DrawerOpenAtom);
   const [task, setTask] = useAtom(SelectedTaskAtom);
   const titleInputRef = useRef<InputRef>(null);
   if (!task) {
-    return;
+    return (
+      <div className={styles.container}>
+        <Empty />
+      </div>
+    );
   }
   const onClose = () => {
     setDrawerOpen(false);
@@ -69,11 +78,9 @@ const DetailDrawer: React.FC = () => {
     });
   };
   return (
-    <Drawer
-      open={drawerOpen}
-      size="large"
-      title={
-        <Space>
+    <div className={styles.container}>
+      <div className={styles.innerContainer}>
+        <div className={styles.title}>
           <Checkbox checked={task.completed} onChange={toggleDone} />
           <Input.TextArea
             bordered={false}
@@ -85,77 +92,79 @@ const DetailDrawer: React.FC = () => {
               titleInputRef.current.blur();
             }}
             ref={titleInputRef}
+            size="large"
           />
-        </Space>
-      }
-      closable={false}
-      placement="right"
-      onClose={onClose}
-      width={300}
-    >
-      <List itemLayout="horizontal">
-        <List.Item>
-          <List.Item.Meta
-            avatar={<FormOutlined />}
-            title={
-              <DatePicker
-                bordered={false}
-                suffixIcon={null}
-                placeholder="予定日を設定"
-                value={task.planDate}
-                onChange={onPlanDateChange}
-                format="M/D(ddd)"
-              />
-            }
-          ></List.Item.Meta>
-        </List.Item>
-        <List.Item>
-          <List.Item.Meta
-            avatar={<CalendarOutlined />}
-            title={
-              <DatePicker
-                bordered={false}
-                suffixIcon={null}
-                placeholder="期限日を設定"
-                value={task.dueDate}
-                onChange={onDueDateChange}
-                format="M/D(ddd)"
-              />
-            }
-          />
-        </List.Item>
-        <List.Item>
-          <div className={styles.editorContainer}>
-            <LexicalComposer
-              initialConfig={{
-                namespace: "DetailDrawer",
-                onError: (error) => console.log(error),
-                nodes: [LinkNode, AutoLinkNode],
-              }}
-            >
-              <LinkToolbarItem />
-              <RichTextPlugin
-                contentEditable={
-                  <ContentEditable className={styles.contentEditable} />
-                }
-                placeholder={
-                  <div className={styles.placeholder}>説明文を追加</div>
-                }
-                ErrorBoundary={LexicalErrorBoundary}
-              />
-              <LinkPlugin />
-              <OnChangePlugin onChange={onDescriptionChange} />
-              <HistoryPlugin />
-              <SetInitialValuePlugin
-                id={task.id}
-                editorState={task.description}
-              />
-              <ClickableLinkPlugin newTab={false} />
-            </LexicalComposer>
-          </div>
-        </List.Item>
-      </List>
-    </Drawer>
+          <Button type="text" icon={<CloseOutlined />} onClick={onClose} />
+        </div>
+        <List itemLayout="horizontal">
+          <List.Item>
+            <List.Item.Meta
+              title={
+                <>
+                  <FormOutlined />
+                  <DatePicker
+                    bordered={false}
+                    suffixIcon={null}
+                    placeholder="予定日を設定"
+                    value={task.planDate}
+                    onChange={onPlanDateChange}
+                    format="M/D(ddd)"
+                  />
+                </>
+              }
+            ></List.Item.Meta>
+          </List.Item>
+          <List.Item>
+            <List.Item.Meta
+              title={
+                <>
+                  <CalendarOutlined />
+                  <DatePicker
+                    bordered={false}
+                    suffixIcon={null}
+                    placeholder="期限日を設定"
+                    value={task.dueDate}
+                    onChange={onDueDateChange}
+                    format="M/D(ddd)"
+                  />
+                </>
+              }
+            />
+          </List.Item>
+          <List.Item>
+            <div className={styles.editorContainer}>
+              <LexicalComposer
+                initialConfig={{
+                  namespace: "DetailDrawer",
+                  onError: (error) => console.log(error),
+                  nodes: [LinkNode, AutoLinkNode],
+                }}
+              >
+                <LinkToolbarItem />
+                <RichTextPlugin
+                  contentEditable={
+                    <ContentEditable className={styles.contentEditable} />
+                  }
+                  placeholder={
+                    <div className={styles.placeholder}>説明文を追加</div>
+                  }
+                  ErrorBoundary={LexicalErrorBoundary}
+                />
+                <LinkPlugin />
+                <OnChangePlugin onChange={onDescriptionChange} />
+                <HistoryPlugin />
+                <SetInitialValuePlugin
+                  id={task.id}
+                  editorState={task.description}
+                />
+                <ClickableLinkPlugin newTab={false} />
+              </LexicalComposer>
+            </div>
+          </List.Item>
+        </List>
+      </div>
+    </div>
+    /*</Drawer>*/
   );
 };
 export default DetailDrawer;

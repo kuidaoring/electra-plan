@@ -33,6 +33,7 @@ const TaskList: React.FC<Props> = ({ filter }) => {
   return (
     <List
       itemLayout="horizontal"
+      size="small"
       dataSource={filteredTaskList}
       renderItem={renderItem}
       header={
