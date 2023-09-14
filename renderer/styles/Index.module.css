@@ -4,23 +4,25 @@
   flex-direction: row;
 }
 
-.listLayout {
+.leftContent {
+  max-width: 25%;
+  height: 100vh;
+  background-color: #171a21;
+  padding: 20px 10px;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.centerLayout {
   height: 100vh;
   flex: 1;
+  background-color: rgb(245, 245, 244);
 }
 
-.taskAddContent {
-  position: sticky;
-  top: 0;
-  z-index: 10;
-}
-
-.listContent {
-  margin: 10px;
-  overflow: scroll;
-}
-
-.detailContent {
-  height: 100vh;
+.rightContent {
   flex: 1;
+  background-color: #ffffff;
+}
+
+.rightContentClose {
+  display: none;
 }
