@@ -43,7 +43,6 @@ const TaskList: React.FC<Props> = ({ filter }) => {
           <Tag color="volcano-inverse">未完了</Tag>
         )
       }
-      bordered={true}
       rowKey={(item) => item.task.id}
     />
   );

@@ -23,7 +23,7 @@ const ListPage: React.FC = () => {
           <Content style={{ position: "sticky", top: 0, zIndex: 1 }}>
             <TaskAddForm />
           </Content>
-          <Content style={{ margin: "10px", overflow: "scroll" }}>
+          <Content className={styles.listContent}>
             <Space direction="vertical" style={{ display: "flex" }}>
               <TaskList filter="incompleted" />
               <TaskList filter="completed" />

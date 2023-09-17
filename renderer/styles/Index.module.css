@@ -2,25 +2,31 @@
   min-height: 100vh;
   display: flex;
   flex-direction: row;
+  background-color: rgb(244, 244, 245)
 }
 
 .leftContent {
   max-width: 25%;
   height: 100vh;
-  background-color: #171a21;
   padding: 20px 10px;
-  color: rgba(255, 255, 255, 0.7);
 }
 
 .centerLayout {
-  height: 100vh;
+  height: calc(100vh - 20px);
+  margin: 10px 0;
   flex: 1;
-  background-color: rgb(245, 245, 244);
+  background-color: rgb(255, 255, 255);
+  border-radius: 10px;
+}
+
+.listContent {
+  margin: 10px 0px;
+  padding: 0px 10px;
+  overflow: scroll;
 }
 
 .rightContent {
   flex: 1;
-  background-color: #ffffff;
 }
 
 .rightContentClose {
