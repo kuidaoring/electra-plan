@@ -19,8 +19,14 @@
   border-radius: 10px;
 }
 
+.addTaskFormContent {
+  position: sticky;
+  top: 0;
+  max-height: 40px;
+  margin: 10px 10px 0px;
+}
+
 .listContent {
-  margin: 10px 0px;
   padding: 0px 10px;
   overflow: scroll;
 }

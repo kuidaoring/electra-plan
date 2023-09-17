@@ -20,7 +20,7 @@ const ListPage: React.FC = () => {
           <div>left</div>
         </Content>
         <Layout className={styles.centerLayout}>
-          <Content style={{ position: "sticky", top: 0, zIndex: 1 }}>
+          <Content className={styles.addTaskFormContent}>
             <TaskAddForm />
           </Content>
           <Content className={styles.listContent}>

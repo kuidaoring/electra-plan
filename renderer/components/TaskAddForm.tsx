@@ -4,7 +4,11 @@ import { TaskListAtom } from "../atoms/atoms";
 import { nanoid } from "nanoid";
 import { Dayjs } from "dayjs";
 import { ChangeEvent, useState } from "react";
-import { CalendarOutlined, FormOutlined } from "@ant-design/icons";
+import {
+  CalendarOutlined,
+  FormOutlined,
+  PlusOutlined,
+} from "@ant-design/icons";
 
 type FormValue = {
   title: string;
@@ -32,6 +36,7 @@ const TaskAddForm = () => {
             dueDate: values.dueDate,
             planDate: values.planDate,
             completed: false,
+            hasDescription: false,
           },
           ...taskList,
         ]);
@@ -40,9 +45,9 @@ const TaskAddForm = () => {
       }}
     >
       <Space.Compact block>
-        <Form.Item name="title">
+        <Form.Item name="title" style={{ width: "100%" }}>
           <Input
-            placeholder="タスクを追加"
+            placeholder="タスク"
             onChange={(e: ChangeEvent<HTMLInputElement>) =>
               validateForm(e.target.value)
             }
@@ -50,22 +55,25 @@ const TaskAddForm = () => {
         </Form.Item>
         <Form.Item name="planDate">
           <DatePicker
-            placeholder="予定日を設定"
+            placeholder="予定日"
             suffixIcon={<FormOutlined />}
             format="M/D(ddd)"
           />
         </Form.Item>
         <Form.Item name="dueDate">
           <DatePicker
-            placeholder="期限日を設定"
+            placeholder="期限日"
             suffixIcon={<CalendarOutlined />}
             format="M/D(ddd)"
           />
         </Form.Item>
         <Form.Item>
-          <Button type="primary" htmlType="submit" disabled={!submittable}>
-            登録
-          </Button>
+          <Button
+            type="primary"
+            htmlType="submit"
+            icon={<PlusOutlined />}
+            disabled={!submittable}
+          />
         </Form.Item>
       </Space.Compact>
     </Form>
