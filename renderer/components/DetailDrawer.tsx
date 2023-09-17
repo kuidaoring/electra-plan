@@ -91,6 +91,7 @@ const DetailDrawer: React.FC = () => {
           }}
           ref={titleInputRef}
           size="large"
+          className={styles.titleTextArea}
         />
         <Button type="text" icon={<CloseOutlined />} onClick={onClose} />
       </div>

@@ -12,7 +12,13 @@
   top: 0;
   border-block-end: 1px solid rgba(5,5,5,0.06);
   z-index: 1;
-  background-color: rgb(244, 244, 245)
+  background-color: rgb(244, 244, 245);
+  padding-top: 5px;
+}
+
+.titleTextArea:focus {
+  border: 1px solid #4096ff;
+  box-shadow: 0 0 0 2px rgba(5, 145, 255, 0.1)
 }
 
 .editorContainer {
