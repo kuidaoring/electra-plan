@@ -1,8 +1,7 @@
 .container {
   height: calc(100vh - 20px);
-  margin: 10px 0px;
-  padding: 0px 10px;
   overflow: scroll;
+  padding-right: 10px;
 }
 
 .title {

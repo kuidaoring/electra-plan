@@ -13,7 +13,7 @@
 
 .centerLayout {
   height: calc(100vh - 20px);
-  margin: 10px 0;
+  margin: 10px 10px 10px 0px;
   flex: 1;
   background-color: rgb(255, 255, 255);
   border-radius: 10px;
@@ -33,6 +33,7 @@
 
 .rightContent {
   flex: 1;
+  margin: 10px 0px;
 }
 
 .rightContentClose {
