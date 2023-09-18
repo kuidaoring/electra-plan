@@ -1,6 +1,7 @@
 import {
   CalendarOutlined,
   CloseOutlined,
+  DeleteOutlined,
   FormOutlined,
 } from "@ant-design/icons";
 import {
@@ -11,8 +12,13 @@ import {
   Input,
   InputRef,
   List,
+  Popconfirm,
 } from "antd";
-import { DrawerOpenAtom, SelectedTaskAtom } from "../atoms/atoms";
+import {
+  DeleteTaskAtom,
+  DrawerOpenAtom,
+  SelectedTaskAtom,
+} from "../atoms/atoms";
 import { useAtom, useSetAtom } from "jotai";
 import { LexicalComposer } from "@lexical/react/LexicalComposer";
 import { RichTextPlugin } from "@lexical/react/LexicalRichTextPlugin";
@@ -33,11 +39,14 @@ import { useRef } from "react";
 const DetailDrawer: React.FC = () => {
   const setDrawerOpen = useSetAtom(DrawerOpenAtom);
   const [task, setTask] = useAtom(SelectedTaskAtom);
+  const deleteTask = useSetAtom(DeleteTaskAtom);
   const titleInputRef = useRef<InputRef>(null);
   if (!task) {
     return (
       <div className={styles.container}>
-        <Empty />
+        <div className={styles.empty}>
+          <Empty />
+        </div>
       </div>
     );
   }
@@ -76,6 +85,7 @@ const DetailDrawer: React.FC = () => {
       });
     });
   };
+
   return (
     <div className={styles.container}>
       <div className={styles.title}>
@@ -161,6 +171,17 @@ const DetailDrawer: React.FC = () => {
           </div>
         </List.Item>
       </List>
+      <div className={styles.footer}>
+        <Popconfirm
+          title={`"${task.title}"を削除します。`}
+          description="この操作は元に戻すことができません。"
+          okText="タスクを削除"
+          cancelText="キャンセル"
+          onConfirm={deleteTask}
+        >
+          <Button type="text" icon={<DeleteOutlined />} />
+        </Popconfirm>
+      </div>
     </div>
   );
 };

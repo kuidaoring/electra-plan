@@ -51,3 +51,12 @@ export const SelectedTaskAtom = atom(
     set(task, newValue);
   }
 );
+
+export const DeleteTaskAtom = atom(null, (get, set) => {
+  const selected = get(SelectedTaskAtom);
+  if (selected) {
+    set(TaskListAtom, (prev) => {
+      return prev.filter((task) => task.id !== selected.id);
+    });
+  }
+});
