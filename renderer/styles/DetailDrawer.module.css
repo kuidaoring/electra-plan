@@ -1,5 +1,5 @@
 .container {
-  height: calc(100vh - 20px);
+  height: calc(100vh - var(--global-header-height) - var(--content-margin-top) - var(--content-margin-bottom));
   overflow: scroll;
   padding-right: 10px;
   padding-bottom: 40px;

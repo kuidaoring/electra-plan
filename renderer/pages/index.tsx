@@ -1,7 +1,7 @@
 import React from "react";
 import "ress";
-import { ConfigProvider, Layout, Space, theme } from "antd";
-const { Content } = Layout;
+import { ConfigProvider, Layout, Space } from "antd";
+const { Content, Header } = Layout;
 import DetailDrawer from "../components/DetailDrawer";
 import TaskList from "../components/TaskList";
 import TaskAddForm from "../components/TaskAddForm";
@@ -15,6 +15,7 @@ const ListPage: React.FC = () => {
   const drawerOpen = useAtomValue(DrawerOpenAtom);
   return (
     <ConfigProvider locale={jaJP}>
+      <Header className={styles.header} />
       <Layout className={styles.pageLayout}>
         <Content className={styles.leftContent}>
           <div>left</div>

@@ -1,19 +1,25 @@
 .pageLayout {
-  min-height: 100vh;
+  min-height: calc(100vh - var(--global-header-height));
   display: flex;
   flex-direction: row;
   background-color: rgb(244, 244, 245)
 }
 
+.header {
+  height: var(--global-header-height);
+  background-color: rgb(244, 244, 245);
+  -webkit-app-region: drag;
+}
+
 .leftContent {
   max-width: 25%;
-  height: 100vh;
+  height: calc(100vh - var(--global-header-height));
   padding: 20px 10px;
 }
 
 .centerLayout {
-  height: calc(100vh - 20px);
-  margin: 10px 10px 10px 0px;
+  height: calc(100vh - var(--global-header-height) - var(--content-margin-top) - var(--content-margin-bottom));
+  margin: var(--content-margin-top) var(--content-margin-bottom) 10px 0px;
   flex: 1;
   background-color: rgb(255, 255, 255);
   border-radius: 10px;
@@ -33,7 +39,7 @@
 
 .rightContent {
   flex: 1;
-  margin: 10px 0px;
+  margin: var(--content-margin-top) var(--content-margin-bottom) 0 0;
 }
 
 .rightContentClose {

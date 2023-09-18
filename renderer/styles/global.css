@@ -2,3 +2,9 @@ html, body {
   margin: 0 auto;
   scrollbar-width: thin;
 }
+
+:root {
+  --global-header-height: 15px;
+  --content-margin-top: 10px;
+  --content-margin-bottom: 10px;
+}
