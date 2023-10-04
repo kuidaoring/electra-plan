@@ -1,6 +1,6 @@
 import { Button, DatePicker, Form, Input, Space } from "antd";
-import { useAtom } from "jotai";
-import { TaskListAtom } from "../atoms/atoms";
+import { useSetAtom } from "jotai";
+import { CreateTaskAtom } from "../atoms/atoms";
 import { nanoid } from "nanoid";
 import { Dayjs } from "dayjs";
 import { ChangeEvent, useState } from "react";
@@ -17,7 +17,7 @@ type FormValue = {
 };
 
 const TaskAddForm = () => {
-  const [taskList, setTaskList] = useAtom(TaskListAtom);
+  const createTask = useSetAtom(CreateTaskAtom);
   const [form] = Form.useForm();
   const [submittable, setSubmittable] = useState(false);
 
@@ -29,17 +29,18 @@ const TaskAddForm = () => {
     <Form
       form={form}
       onFinish={(values: FormValue) => {
-        setTaskList([
-          {
-            id: nanoid(),
-            title: values.title.trim(),
-            dueDate: values.dueDate,
-            planDate: values.planDate,
-            completed: false,
-            hasDescription: false,
-          },
-          ...taskList,
-        ]);
+        createTask({
+          id: nanoid(),
+          title: values.title.trim(),
+          dueDate: values.dueDate?.toDate(),
+          planDate: values.planDate?.toDate(),
+          completed: false,
+          hasDescription: false,
+          archived: false,
+          createdAt: new Date(),
+        }).then(() => {
+          console.log("task created");
+        });
         form.resetFields();
         setSubmittable(false);
       }}

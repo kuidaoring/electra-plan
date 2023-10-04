@@ -35,6 +35,7 @@ import LinkToolbarItem from "./lexical/LinkToolbarItem";
 import styles from "../styles/DetailDrawer.module.css";
 import ClickableLinkPlugin from "./lexical/ClickableLinkPlugin";
 import { useRef } from "react";
+import dayjs from "dayjs";
 
 const DetailDrawer: React.FC = () => {
   const setDrawerOpen = useSetAtom(DrawerOpenAtom);
@@ -65,21 +66,24 @@ const DetailDrawer: React.FC = () => {
   };
   const onDueDateChange = (nextDueDate) => {
     setTask((prev) => {
-      return { ...prev, dueDate: nextDueDate };
+      return { ...prev, dueDate: nextDueDate.toDate() };
     });
   };
   const onPlanDateChange = (nextPlanDate) => {
     setTask((prev) => {
-      return { ...prev, planDate: nextPlanDate };
+      return { ...prev, planDate: nextPlanDate.toDate() };
     });
   };
   const onDescriptionChange = (editorState) => {
     editorState.read(() => {
       const hasDescprion = !$canShowPlaceholder(false);
+      const nextEditorState = hasDescprion
+        ? JSON.stringify(editorState)
+        : undefined;
       setTask((prev) => {
         return {
           ...prev,
-          description: editorState,
+          description: nextEditorState,
           hasDescription: hasDescprion,
         };
       });
@@ -115,7 +119,7 @@ const DetailDrawer: React.FC = () => {
                   bordered={false}
                   suffixIcon={null}
                   placeholder="予定日を設定"
-                  value={task.planDate}
+                  value={task.planDate ? dayjs(task.planDate) : undefined}
                   onChange={onPlanDateChange}
                   format="M/D(ddd)"
                 />
@@ -132,7 +136,7 @@ const DetailDrawer: React.FC = () => {
                   bordered={false}
                   suffixIcon={null}
                   placeholder="期限日を設定"
-                  value={task.dueDate}
+                  value={task.dueDate ? dayjs(task.dueDate) : undefined}
                   onChange={onDueDateChange}
                   format="M/D(ddd)"
                 />
@@ -165,6 +169,7 @@ const DetailDrawer: React.FC = () => {
               <SetInitialValuePlugin
                 id={task.id}
                 editorState={task.description}
+                isJson={true}
               />
               <ClickableLinkPlugin newTab={false} />
             </LexicalComposer>

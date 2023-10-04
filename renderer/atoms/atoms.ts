@@ -1,62 +1,76 @@
-import { atom } from "jotai";
-import { splitAtom } from "jotai/utils";
+import { PrimitiveAtom, atom } from "jotai";
 import { Task } from "../interfaces";
-import { nanoid } from "nanoid";
-import dayjs from "dayjs";
 
-const initialTaskList: Array<Task> = [
-  {
-    id: nanoid(),
-    title: "hoge_atom",
-    planDate: dayjs("2023-08-09"),
-    dueDate: dayjs("2023-08-19"),
-    completed: false,
-    hasDescription: false,
-  },
-  {
-    id: nanoid(),
-    title: "2件目_atom",
-    dueDate: dayjs("2023-08-18"),
-    completed: true,
-    hasDescription: false,
-  },
-  {
-    id: nanoid(),
-    title:
-      "Electraという単語は、電気やエネルギーと関連づけられることがあります。そのため、この名前は効率的な計画やタスクの管理を意味し、エネルギーを活用して作業を進めることを強調するかもしれません。",
-    dueDate: dayjs("2023-08-18"),
-    completed: true,
-    hasDescription: false,
-  },
-];
-export const TaskListAtom = atom(initialTaskList);
-// export const TaskListAtom = atom<Task[]>([]);
-export const TaskAtomsAtom = splitAtom(TaskListAtom);
-export const DrawerOpenAtom = atom(false);
+const createTaskAtom = (task: Task) => {
+  const baseAtom = atom(task);
+  const anAtom = atom(
+    (get) => get(baseAtom),
+    async (get, set, update) => {
+      const nextValue =
+        typeof update === "function" ? update(get(baseAtom)) : update;
+      set(baseAtom, nextValue);
+      await window.electron.updateTask(nextValue);
+    }
+  );
+  return anAtom;
+};
+
+const BaseTaskListAtom = atom<PrimitiveAtom<Task>[]>([]);
+BaseTaskListAtom.onMount = (set) => {
+  window.electron.getAllTasks().then((tasks) =>
+    set(
+      tasks.map((task) => {
+        return createTaskAtom(task);
+      })
+    )
+  );
+};
+
+export const TaskListAtom = atom((get) => {
+  return get(BaseTaskListAtom);
+});
+
+export const RawTaskListAtom = atom((get) => {
+  return get(BaseTaskListAtom).map((atom) => get(atom));
+});
+
 export const SelectedIdAtom = atom("");
 export const SelectedTaskAtom = atom(
   (get) => {
-    const taskList = get(TaskAtomsAtom);
-    const id = get(SelectedIdAtom);
-    const atom = taskList.find((atom) => get(atom).id === id);
+    const atom = get(TaskListAtom).find(
+      (atom) => get(atom).id === get(SelectedIdAtom)
+    );
     return atom ? get(atom) : null;
   },
-  (get, set, newValue) => {
-    const taskList = get(TaskAtomsAtom);
-    const id = get(SelectedIdAtom);
-    const task = taskList.find((taskAtom) => get(taskAtom).id === id);
-    if (!task) {
+  async (get, set, newValue) => {
+    const atom = get(TaskListAtom).find(
+      (atom) => get(atom).id === get(SelectedIdAtom)
+    );
+    if (!atom) {
       return;
     }
-    set(task, newValue);
+    const nextValue =
+      typeof newValue === "function" ? newValue(get(atom)) : newValue;
+    set(atom, nextValue);
+    await window.electron.updateTask(nextValue as Task);
   }
 );
 
-export const DeleteTaskAtom = atom(null, (get, set) => {
+export const CreateTaskAtom = atom(null, async (get, set, newTask: Task) => {
+  set(BaseTaskListAtom, (prev) => {
+    return [...prev, createTaskAtom(newTask)];
+  });
+  await window.electron.createTask(newTask);
+});
+
+export const DeleteTaskAtom = atom(null, async (get, set) => {
   const selected = get(SelectedTaskAtom);
   if (selected) {
-    set(TaskListAtom, (prev) => {
-      return prev.filter((task) => task.id !== selected.id);
+    set(BaseTaskListAtom, (prev) => {
+      return prev.filter((atom) => get(atom).id !== selected.id);
     });
+    await window.electron.deleteTask(selected.id);
   }
 });
+
+export const DrawerOpenAtom = atom(false);

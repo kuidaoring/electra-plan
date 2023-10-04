@@ -5,6 +5,7 @@ import {
   FileTextOutlined,
   FormOutlined,
 } from "@ant-design/icons";
+import dayjs from "dayjs";
 
 type Props = {
   task: Task;
@@ -19,13 +20,13 @@ const TaskListItemMeta: React.FC<Props> = ({ task }) => {
       {task.planDate && (
         <Space>
           <FormOutlined />
-          {task.planDate.locale("ja").format("M/D(ddd)")}
+          {dayjs(task.planDate).locale("ja").format("M/D(ddd)")}
         </Space>
       )}
       {task.dueDate && (
         <Space>
           <CalendarOutlined />
-          {task.dueDate.locale("ja").format("M/D(ddd)")}
+          {dayjs(task.dueDate).locale("ja").format("M/D(ddd)")}
         </Space>
       )}
       {task.hasDescription && (

@@ -2,7 +2,7 @@ import { Empty, List, Tag } from "antd";
 import { Task } from "../interfaces";
 import React, { ReactNode } from "react";
 import { PrimitiveAtom, useAtomValue } from "jotai";
-import { TaskAtomsAtom, TaskListAtom } from "../atoms/atoms";
+import { RawTaskListAtom, TaskListAtom } from "../atoms/atoms";
 import TaskListItem from "./TaskListItem";
 
 type Props = {
@@ -15,8 +15,9 @@ type Item = {
 };
 
 const TaskList: React.FC<Props> = ({ filter }) => {
-  const rawTaskList = useAtomValue(TaskListAtom);
-  const taskList = useAtomValue(TaskAtomsAtom).map((atom, index) => {
+  const taskAtomList = useAtomValue(TaskListAtom);
+  const rawTaskList = useAtomValue(RawTaskListAtom);
+  const taskList = taskAtomList.map((atom, index) => {
     return { task: rawTaskList[index], atom: atom };
   });
   const filteredTaskList = taskList.filter((item) => {
@@ -24,7 +25,7 @@ const TaskList: React.FC<Props> = ({ filter }) => {
     return filter === "completed" ? completed : !completed;
   });
 
-  const renderItem = (item: Item, index: number): ReactNode => {
+  const renderItem = (item: Item): ReactNode => {
     return <TaskListItem atom={item.atom} />;
   };
   if (taskList.findLastIndex.length < 1) {

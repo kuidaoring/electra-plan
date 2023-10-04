@@ -4,7 +4,6 @@
 //
 // import User from 'path/to/interfaces';
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-import { Dayjs } from "dayjs";
 import { IpcRenderer } from "electron";
 
 declare global {
@@ -24,9 +23,11 @@ export type User = {
 export type Task = {
   id: string;
   title: string;
-  dueDate?: Dayjs;
-  planDate?: Dayjs;
+  dueDate?: Date;
+  planDate?: Date;
   completed: boolean;
   description?: string;
   hasDescription: boolean;
+  archived: boolean;
+  createdAt: Date;
 };
