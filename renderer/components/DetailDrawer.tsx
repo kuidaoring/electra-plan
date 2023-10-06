@@ -15,11 +15,12 @@ import {
   Popconfirm,
 } from "antd";
 import {
+  CurrentTaskAtom,
   DeleteTaskAtom,
   DrawerOpenAtom,
   SelectedTaskAtom,
 } from "../atoms/atoms";
-import { useAtom, useSetAtom } from "jotai";
+import { useAtomValue, useSetAtom } from "jotai";
 import { LexicalComposer } from "@lexical/react/LexicalComposer";
 import { RichTextPlugin } from "@lexical/react/LexicalRichTextPlugin";
 import { LinkPlugin } from "@lexical/react/LexicalLinkPlugin";
@@ -39,7 +40,8 @@ import dayjs from "dayjs";
 
 const DetailDrawer: React.FC = () => {
   const setDrawerOpen = useSetAtom(DrawerOpenAtom);
-  const [task, setTask] = useAtom(SelectedTaskAtom);
+  const setTask = useSetAtom(SelectedTaskAtom);
+  const task = useAtomValue(CurrentTaskAtom);
   const deleteTask = useSetAtom(DeleteTaskAtom);
   const titleInputRef = useRef<InputRef>(null);
   if (!task) {

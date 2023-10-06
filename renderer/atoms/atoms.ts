@@ -34,7 +34,24 @@ export const RawTaskListAtom = atom((get) => {
   return get(BaseTaskListAtom).map((atom) => get(atom));
 });
 
-export const SelectedIdAtom = atom("");
+const PrevTimerAtom = atom<ReturnType<typeof setTimeout> | undefined>(
+  undefined
+) as PrimitiveAtom<ReturnType<typeof setTimeout> | undefined>;
+const _CurrentTaskAtom = atom<Task | null>(null) as PrimitiveAtom<Task | null>;
+export const CurrentTaskAtom = atom((get) => {
+  return get(_CurrentTaskAtom);
+});
+const _SelectedIdAtom = atom("");
+export const SelectedIdAtom = atom(
+  (get) => {
+    return get(_SelectedIdAtom);
+  },
+  (get, set, id) => {
+    set(_SelectedIdAtom, id);
+    const atom = get(TaskListAtom).find((atom) => get(atom).id === id);
+    set(_CurrentTaskAtom, get(atom));
+  }
+);
 export const SelectedTaskAtom = atom(
   (get) => {
     const atom = get(TaskListAtom).find(
@@ -42,17 +59,34 @@ export const SelectedTaskAtom = atom(
     );
     return atom ? get(atom) : null;
   },
-  async (get, set, newValue) => {
+  async (get, set, newValue: Task | Function) => {
     const atom = get(TaskListAtom).find(
       (atom) => get(atom).id === get(SelectedIdAtom)
     );
     if (!atom) {
       return;
     }
+
+    clearTimeout(get(PrevTimerAtom));
+
     const nextValue =
       typeof newValue === "function" ? newValue(get(atom)) : newValue;
-    set(atom, nextValue);
-    await window.electron.updateTask(nextValue as Task);
+
+    const onDebounceStart = () => {
+      set(_CurrentTaskAtom, nextValue);
+    };
+
+    const onDebounceEnd = () => {
+      set(atom, get(_CurrentTaskAtom));
+    };
+
+    onDebounceStart();
+
+    const nextTimerId = setTimeout(() => {
+      onDebounceEnd();
+    }, 500);
+
+    set(PrevTimerAtom, nextTimerId);
   }
 );
 
