@@ -4,9 +4,11 @@ import React, { ReactNode } from "react";
 import { PrimitiveAtom, useAtomValue } from "jotai";
 import { RawTaskListAtom, TaskListAtom } from "../atoms/atoms";
 import TaskListItem from "./TaskListItem";
+import dayjs from "dayjs";
 
 type Props = {
   filter: "completed" | "incompleted";
+  today: boolean;
 };
 
 type Item = {
@@ -14,16 +16,23 @@ type Item = {
   atom: PrimitiveAtom<Task>;
 };
 
-const TaskList: React.FC<Props> = ({ filter }) => {
+const TaskList: React.FC<Props> = ({ filter, today }) => {
   const taskAtomList = useAtomValue(TaskListAtom);
   const rawTaskList = useAtomValue(RawTaskListAtom);
   const taskList = taskAtomList.map((atom, index) => {
     return { task: rawTaskList[index], atom: atom };
   });
-  const filteredTaskList = taskList.filter((item) => {
-    const completed = item.task.completed;
-    return filter === "completed" ? completed : !completed;
-  });
+  const filteredTaskList = taskList
+    .filter((item) => {
+      const completed = item.task.completed;
+      return filter === "completed" ? completed : !completed;
+    })
+    .filter((item) => {
+      return (
+        !today ||
+        (item.task.planDate && dayjs(item.task.planDate).isSame(dayjs(), "day"))
+      );
+    });
 
   const renderItem = (item: Item): ReactNode => {
     return <TaskListItem atom={item.atom} />;

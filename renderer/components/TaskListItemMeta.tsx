@@ -3,7 +3,7 @@ import { Task } from "../interfaces";
 import {
   CalendarOutlined,
   FileTextOutlined,
-  FormOutlined,
+  ScheduleOutlined,
 } from "@ant-design/icons";
 import dayjs from "dayjs";
 
@@ -19,7 +19,7 @@ const TaskListItemMeta: React.FC<Props> = ({ task }) => {
     <Space split={<Divider type="vertical" />}>
       {task.planDate && (
         <Space>
-          <FormOutlined />
+          <ScheduleOutlined />
           {dayjs(task.planDate).locale("ja").format("M/D(ddd)")}
         </Space>
       )}

@@ -1,0 +1,16 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+.menu {
+  background-color: rgb(244, 244, 245);
+  border-inline-end: none;
+}
+.footer {
+  display: flex;
+  flex-direction: row-reverse;
+  border-block-start: 1px solid rgba(5,5,5,0.06);
+  background-color: rgb(244, 244, 245);
+  margin-top: auto;
+}

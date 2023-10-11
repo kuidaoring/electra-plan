@@ -2,7 +2,8 @@ import {
   CalendarOutlined,
   CloseOutlined,
   DeleteOutlined,
-  FormOutlined,
+  RocketOutlined,
+  ScheduleOutlined,
 } from "@ant-design/icons";
 import {
   Button,
@@ -68,12 +69,12 @@ const DetailDrawer: React.FC = () => {
   };
   const onDueDateChange = (nextDueDate) => {
     setTask((prev) => {
-      return { ...prev, dueDate: nextDueDate.toDate() };
+      return { ...prev, dueDate: nextDueDate?.toDate() };
     });
   };
   const onPlanDateChange = (nextPlanDate) => {
     setTask((prev) => {
-      return { ...prev, planDate: nextPlanDate.toDate() };
+      return { ...prev, planDate: nextPlanDate?.toDate() };
     });
   };
   const onDescriptionChange = (editorState) => {
@@ -116,7 +117,27 @@ const DetailDrawer: React.FC = () => {
           <List.Item.Meta
             title={
               <>
-                <FormOutlined />
+                <RocketOutlined />
+                {task.planDate &&
+                dayjs(task.planDate).isSame(dayjs(), "day") ? (
+                  <Button type="link" onClick={() => onPlanDateChange(null)}>
+                    今日のタスクに追加されました
+                    <CloseOutlined />
+                  </Button>
+                ) : (
+                  <Button type="text" onClick={() => onPlanDateChange(dayjs())}>
+                    今日のタスクに追加
+                  </Button>
+                )}
+              </>
+            }
+          ></List.Item.Meta>
+        </List.Item>
+        <List.Item>
+          <List.Item.Meta
+            title={
+              <>
+                <ScheduleOutlined />
                 <DatePicker
                   bordered={false}
                   suffixIcon={null}

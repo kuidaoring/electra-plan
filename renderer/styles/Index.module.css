@@ -12,9 +12,8 @@
 }
 
 .leftContent {
-  max-width: 25%;
   height: calc(100vh - var(--global-header-height));
-  padding: 20px 10px;
+  padding: 20px 0px 10px 0px;
 }
 
 .centerLayout {
@@ -28,8 +27,9 @@
 .addTaskFormContent {
   position: sticky;
   top: 0;
-  max-height: 40px;
-  margin: 10px 10px 0px;
+  margin: 10px;
+  max-height: 100px;
+  min-height: 100px;
 }
 
 .listContent {

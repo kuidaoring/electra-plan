@@ -6,8 +6,8 @@ import { Dayjs } from "dayjs";
 import { ChangeEvent, useState } from "react";
 import {
   CalendarOutlined,
-  FormOutlined,
   PlusOutlined,
+  ScheduleOutlined,
 } from "@ant-design/icons";
 
 type FormValue = {
@@ -57,7 +57,7 @@ const TaskAddForm = () => {
         <Form.Item name="planDate">
           <DatePicker
             placeholder="予定日"
-            suffixIcon={<FormOutlined />}
+            suffixIcon={<ScheduleOutlined />}
             format="M/D(ddd)"
           />
         </Form.Item>

@@ -76,7 +76,7 @@ app.on("ready", async () => {
   mainWindow.webContents.on("will-navigate", handleLinkClick);
 
   const url = isDev
-    ? "http://localhost:8000/"
+    ? "http://localhost:8000/list/all"
     : format({
         pathname: join(__dirname, "../renderer/out/index.html"),
         protocol: "file:",
