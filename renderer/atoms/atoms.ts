@@ -9,6 +9,9 @@ const createTaskAtom = (task: Task) => {
       const nextValue =
         typeof update === "function" ? update(get(baseAtom)) : update;
       set(baseAtom, nextValue);
+      if (nextValue.id === get(SelectedIdAtom)) {
+        set(_CurrentTaskAtom, nextValue);
+      }
       await window.electron.updateTask(nextValue);
     }
   );
