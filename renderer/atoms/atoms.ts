@@ -95,7 +95,7 @@ export const SelectedTaskAtom = atom(
 
 export const CreateTaskAtom = atom(null, async (get, set, newTask: Task) => {
   set(BaseTaskListAtom, (prev) => {
-    return [...prev, createTaskAtom(newTask)];
+    return [createTaskAtom(newTask), ...prev];
   });
   await window.electron.createTask(newTask);
 });
