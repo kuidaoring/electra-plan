@@ -7,6 +7,15 @@
   background-color: rgb(244, 244, 245);
   border-inline-end: none;
 }
+.menuLink {
+  display: inline-flex;
+  width: 80%;
+  align-items: center;
+}
+.taskCountTag {
+  margin-inline-start: auto;
+  margin-inline-end: 0;
+}
 .footer {
   display: flex;
   flex-direction: row-reverse;
