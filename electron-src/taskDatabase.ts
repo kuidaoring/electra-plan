@@ -1,5 +1,5 @@
 import "reflect-metadata";
-import { DataSource } from "typeorm";
+import { DataSource, IsNull } from "typeorm";
 import { TaskEntity } from "./entity/taskEntity";
 import { Task } from "../renderer/interfaces";
 import dayjs from "dayjs";
@@ -20,7 +20,7 @@ class TaskDatabase {
   getAllTasks(): Promise<Task[]> {
     return this.dataSource.manager
       .find(TaskEntity, {
-        where: { archived: false },
+        where: { archivedAt: IsNull() },
         order: { createdAt: "DESC" },
       })
       .then((tasks) => {
@@ -49,10 +49,14 @@ const entityToModel = (entity: TaskEntity): Task => {
     title: entity.title,
     dueDate: entity.dueDate ? dayjs(entity.dueDate).toDate() : undefined,
     planDate: entity.planDate ? dayjs(entity.planDate).toDate() : undefined,
-    completed: entity.completed,
+    completedAt: entity.completedAt
+      ? dayjs(entity.completedAt).toDate()
+      : undefined,
     description: entity.description,
     hasDescription: !!entity.description,
-    archived: entity.archived,
+    archivedAt: entity.archivedAt
+      ? dayjs(entity.archivedAt).toDate()
+      : undefined,
     createdAt: dayjs(entity.createdAt).toDate(),
   };
 };
@@ -63,9 +67,9 @@ const modelToEntity = (model: Task): TaskEntity => {
     model.title,
     model.dueDate ? dayjs(model.dueDate).toISOString() : undefined,
     model.planDate ? dayjs(model.planDate).toISOString() : undefined,
-    model.completed,
+    model.completedAt ? dayjs(model.completedAt).toISOString() : undefined,
     model.description,
-    model.archived,
+    model.archivedAt ? dayjs(model.archivedAt).toISOString() : undefined,
     dayjs(model.createdAt).toISOString()
   );
 };

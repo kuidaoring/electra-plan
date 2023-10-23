@@ -24,7 +24,7 @@ const TaskList: React.FC<Props> = ({ filter, today }) => {
   });
   const filteredTaskList = taskList
     .filter((item) => {
-      const completed = item.task.completed;
+      const completed = !!item.task.completedAt;
       return filter === "completed" ? completed : !completed;
     })
     .filter((item) => {

@@ -25,9 +25,9 @@ export type Task = {
   title: string;
   dueDate?: Date;
   planDate?: Date;
-  completed: boolean;
+  completedAt?: Date;
   description?: string;
   hasDescription: boolean;
-  archived: boolean;
+  archivedAt?: Date;
   createdAt: Date;
 };

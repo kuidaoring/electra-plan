@@ -47,9 +47,9 @@ const TaskAddForm = () => {
           title: values.title.trim(),
           dueDate: values.dueDate?.toDate(),
           planDate: getPlanDate(values.planDate, isTodayPage),
-          completed: false,
+          completedAt: null,
           hasDescription: false,
-          archived: false,
+          archivedAt: null,
           createdAt: new Date(),
         }).then(() => {
           console.log("task created");

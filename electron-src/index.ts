@@ -37,8 +37,8 @@ function initDatabase(appDataPath: string) {
     description TEXT,
     planDate TEXT,
     dueDate TEXT,
-    completed INTEGER NOT NULL,
-    archived INTEGER NOT NULL,
+    completedAt TEXT,
+    archivedAt TEXT,
     createdAt TEXT
   )
 `;

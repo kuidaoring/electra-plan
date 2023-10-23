@@ -11,11 +11,11 @@ export class TaskEntity {
   @Column()
   planDate?: string;
   @Column()
-  completed: boolean;
+  completedAt?: string;
   @Column()
   description?: string;
   @Column()
-  archived: boolean;
+  archivedAt?: string;
   @Column()
   createdAt?: string;
 
@@ -24,18 +24,18 @@ export class TaskEntity {
     title: string,
     dueDate: string | undefined,
     planDate: string | undefined,
-    completed: boolean,
+    completedAt: string | undefined,
     description: string | undefined,
-    archived: boolean,
+    archivedAt: string | undefined,
     createdAt: string
   ) {
     this.id = id;
     this.title = title;
     this.dueDate = dueDate;
     this.planDate = planDate;
-    this.completed = completed;
+    this.completedAt = completedAt;
     this.description = description;
-    this.archived = archived;
+    this.archivedAt = archivedAt;
     this.createdAt = createdAt;
   }
 }

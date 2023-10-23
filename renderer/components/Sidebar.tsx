@@ -13,7 +13,7 @@ import styles from "../styles/Sidebar.module.css";
 import { useState } from "react";
 import Link from "next/link";
 import { useAtomValue } from "jotai";
-import { RawTaskListAtom, TaskListAtom } from "../atoms/atoms";
+import { RawTaskListAtom } from "../atoms/atoms";
 import dayjs from "dayjs";
 
 const Sidebar = ({ className, selected }) => {
@@ -22,13 +22,13 @@ const Sidebar = ({ className, selected }) => {
 
   const todaysNotCompletedTaskCount = taskList.filter(
     (task) =>
-      !task.completed &&
+      !task.completedAt &&
       task.planDate &&
       dayjs(task.planDate).isSame(dayjs(), "day")
   ).length;
 
   const allNotCompletedTaskCount = taskList.filter(
-    (task) => !task.completed
+    (task) => !task.completedAt
   ).length;
 
   const menuItems = [

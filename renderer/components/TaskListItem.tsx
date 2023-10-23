@@ -17,7 +17,7 @@ const TaskListItem = ({ atom }: Props) => {
   const setDrawerOpen = useSetAtom(DrawerOpenAtom);
   const toggleDone = () => {
     setTask((prev) => {
-      return { ...prev, completed: !prev.completed };
+      return { ...prev, completedAt: prev.completedAt ? null : new Date() };
     });
   };
   return (
@@ -31,13 +31,13 @@ const TaskListItem = ({ atom }: Props) => {
       <List.Item.Meta
         avatar={
           <Checkbox
-            checked={task.completed}
+            checked={!!task.completedAt}
             onChange={toggleDone}
             onClick={(e) => e.stopPropagation()}
           />
         }
         title={
-          task.completed ? (
+          task.completedAt ? (
             <Text delete>{task.title}</Text>
           ) : (
             <Text>{task.title}</Text>

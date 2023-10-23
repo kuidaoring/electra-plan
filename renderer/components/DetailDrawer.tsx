@@ -59,7 +59,7 @@ const DetailDrawer: React.FC = () => {
   };
   const toggleDone = () => {
     setTask((prev) => {
-      return { ...prev, completed: !prev.completed };
+      return { ...prev, completedAt: prev.completedAt ? null : new Date() };
     });
   };
   const onTitleChange = (event) => {
@@ -96,7 +96,7 @@ const DetailDrawer: React.FC = () => {
   return (
     <div className={styles.container}>
       <div className={styles.title}>
-        <Checkbox checked={task.completed} onChange={toggleDone} />
+        <Checkbox checked={!!task.completedAt} onChange={toggleDone} />
         <Input.TextArea
           bordered={false}
           value={task.title}
