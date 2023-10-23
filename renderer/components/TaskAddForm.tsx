@@ -2,13 +2,14 @@ import { Button, DatePicker, Form, Input, Space } from "antd";
 import { useSetAtom } from "jotai";
 import { CreateTaskAtom } from "../atoms/atoms";
 import { nanoid } from "nanoid";
-import { Dayjs } from "dayjs";
+import dayjs, { Dayjs } from "dayjs";
 import { ChangeEvent, useState } from "react";
 import {
   CalendarOutlined,
   PlusOutlined,
   ScheduleOutlined,
 } from "@ant-design/icons";
+import { useRouter } from "next/router";
 
 type FormValue = {
   title: string;
@@ -16,7 +17,19 @@ type FormValue = {
   planDate?: Dayjs;
 };
 
+const getPlanDate = (planDateValue: Dayjs, isTodayPage: boolean): Date => {
+  if (planDateValue) {
+    return planDateValue.toDate();
+  }
+  if (isTodayPage) {
+    return dayjs().startOf("day").toDate();
+  }
+  return null;
+};
+
 const TaskAddForm = () => {
+  const router = useRouter();
+  const isTodayPage = router.query.filter === "today";
   const createTask = useSetAtom(CreateTaskAtom);
   const [form] = Form.useForm();
   const [submittable, setSubmittable] = useState(false);
@@ -33,7 +46,7 @@ const TaskAddForm = () => {
           id: nanoid(),
           title: values.title.trim(),
           dueDate: values.dueDate?.toDate(),
-          planDate: values.planDate?.toDate(),
+          planDate: getPlanDate(values.planDate, isTodayPage),
           completed: false,
           hasDescription: false,
           archived: false,
