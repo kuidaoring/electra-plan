@@ -6,27 +6,27 @@ export class TaskEntity {
   id: string;
   @Column()
   title: string;
+  @Column({ nullable: true, type: "text" })
+  dueDate: string | null;
+  @Column({ nullable: true, type: "text" })
+  planDate: string | null;
+  @Column({ nullable: true, type: "text" })
+  completedAt: string | null;
+  @Column({ nullable: true, type: "text" })
+  description: string | null;
+  @Column({ nullable: true, type: "text" })
+  archivedAt: string | null;
   @Column()
-  dueDate?: string;
-  @Column()
-  planDate?: string;
-  @Column()
-  completedAt?: string;
-  @Column()
-  description?: string;
-  @Column()
-  archivedAt?: string;
-  @Column()
-  createdAt?: string;
+  createdAt: string;
 
   constructor(
     id: string,
     title: string,
-    dueDate: string | undefined,
-    planDate: string | undefined,
-    completedAt: string | undefined,
-    description: string | undefined,
-    archivedAt: string | undefined,
+    dueDate: string | null,
+    planDate: string | null,
+    completedAt: string | null,
+    description: string | null,
+    archivedAt: string | null,
     createdAt: string
   ) {
     this.id = id;

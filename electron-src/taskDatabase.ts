@@ -11,7 +11,6 @@ class TaskDatabase {
     this.dataSource = new DataSource({
       type: "sqlite",
       database: path,
-      enableWAL: true,
       entities: [TaskEntity],
     });
     this.dataSource.initialize();
@@ -21,6 +20,22 @@ class TaskDatabase {
     return this.dataSource.manager
       .find(TaskEntity, {
         where: { archivedAt: IsNull() },
+        order: { createdAt: "DESC" },
+      })
+      .then((tasks) => {
+        return tasks.map((task) => {
+          return entityToModel(task);
+        });
+      });
+  }
+
+  getTodayTasks(): Promise<Task[]> {
+    return this.dataSource.manager
+      .find(TaskEntity, {
+        where: {
+          archivedAt: IsNull(),
+          planDate: dayjs().startOf("day").toISOString(),
+        },
         order: { createdAt: "DESC" },
       })
       .then((tasks) => {
@@ -52,7 +67,7 @@ const entityToModel = (entity: TaskEntity): Task => {
     completedAt: entity.completedAt
       ? dayjs(entity.completedAt).toDate()
       : undefined,
-    description: entity.description,
+    description: entity.description ? entity.description : undefined,
     hasDescription: !!entity.description,
     archivedAt: entity.archivedAt
       ? dayjs(entity.archivedAt).toDate()
@@ -65,11 +80,11 @@ const modelToEntity = (model: Task): TaskEntity => {
   return new TaskEntity(
     model.id,
     model.title,
-    model.dueDate ? dayjs(model.dueDate).toISOString() : undefined,
-    model.planDate ? dayjs(model.planDate).toISOString() : undefined,
-    model.completedAt ? dayjs(model.completedAt).toISOString() : undefined,
-    model.description,
-    model.archivedAt ? dayjs(model.archivedAt).toISOString() : undefined,
+    model.dueDate ? dayjs(model.dueDate).toISOString() : null,
+    model.planDate ? dayjs(model.planDate).toISOString() : null,
+    model.completedAt ? dayjs(model.completedAt).toISOString() : null,
+    model.description ? model.description : null,
+    model.archivedAt ? dayjs(model.archivedAt).toISOString() : null,
     dayjs(model.createdAt).toISOString()
   );
 };

@@ -125,7 +125,10 @@ const DetailDrawer: React.FC = () => {
                     <CloseOutlined />
                   </Button>
                 ) : (
-                  <Button type="text" onClick={() => onPlanDateChange(dayjs())}>
+                  <Button
+                    type="text"
+                    onClick={() => onPlanDateChange(dayjs().startOf("day"))}
+                  >
                     今日のタスクに追加
                   </Button>
                 )}

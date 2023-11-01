@@ -8,9 +8,10 @@ import {
   BrowserWindow,
   app,
   ipcMain,
-  IpcMainEvent,
   shell,
   IpcMainInvokeEvent,
+  Tray,
+  Menu,
 } from "electron";
 import isDev from "electron-is-dev";
 import prepareNext from "electron-next";
@@ -65,6 +66,72 @@ app.on("ready", async () => {
     },
   });
 
+  const tray = new Tray(join(__dirname, "../../asset/trayIconTemplate@2x.png"));
+  tray.setToolTip("Electra Plan");
+  const updateTray = () => {
+    setTimeout(async () => {
+      const todayTasks = await taskDatabase.getTodayTasks();
+      if (todayTasks.length === 0) {
+        tray.setContextMenu(
+          Menu.buildFromTemplate([
+            { label: "今日のタスクはありません", enabled: false },
+          ])
+        );
+        return;
+      }
+      const template: Electron.MenuItemConstructorOptions[] = [
+        { label: "今日のタスク", enabled: false },
+        { type: "separator" },
+      ];
+      todayTasks.forEach((task) => {
+        template.push({
+          icon: !!task.completedAt
+            ? join(__dirname, "../../asset/menuCheckIconTemplate@2x.png")
+            : join(__dirname, "../../asset/menuEmptyIconTemplate@2x.png"),
+          label: task.title,
+        });
+      });
+      tray.setContextMenu(Menu.buildFromTemplate(template));
+      tray.setTitle(
+        `${todayTasks.filter((task) => !!task.completedAt).length} / ${
+          todayTasks.length
+        }`
+      );
+    }, 100);
+  };
+
+  ipcMain.handle("task:getAllTasks", () => {
+    updateTray();
+    return taskDatabase.getAllTasks();
+  });
+
+  ipcMain.handle(
+    "task:createTask",
+    (_event: IpcMainInvokeEvent, task: Task) => {
+      const taskEntityPromise = taskDatabase.createTask(task);
+      updateTray();
+      return taskEntityPromise;
+    }
+  );
+
+  ipcMain.handle(
+    "task:updateTask",
+    (_event: IpcMainInvokeEvent, task: Task) => {
+      const taskEntityPromise = taskDatabase.updateTask(task);
+      updateTray();
+      return taskEntityPromise;
+    }
+  );
+
+  ipcMain.handle(
+    "task:deleteTask",
+    (_event: IpcMainInvokeEvent, id: string) => {
+      const deleteResultPromise = taskDatabase.deleteTask(id);
+      updateTray();
+      return deleteResultPromise;
+    }
+  );
+
   const handleLinkClick = (
     details: Electron.Event<Electron.WebContentsWillNavigateEventParams>
   ) => {
@@ -88,25 +155,3 @@ app.on("ready", async () => {
 
 // Quit the app once all windows are closed
 app.on("window-all-closed", app.quit);
-
-// listen the channel `message` and resend the received message to the renderer process
-ipcMain.on("message", (event: IpcMainEvent, message: any) => {
-  console.log(message);
-  setTimeout(() => event.sender.send("message", "hi from electron"), 500);
-});
-
-ipcMain.handle("task:getAllTasks", () => {
-  return taskDatabase.getAllTasks();
-});
-
-ipcMain.handle("task:createTask", (_event: IpcMainInvokeEvent, task: Task) => {
-  return taskDatabase.createTask(task);
-});
-
-ipcMain.handle("task:updateTask", (_event: IpcMainInvokeEvent, task: Task) => {
-  return taskDatabase.updateTask(task);
-});
-
-ipcMain.handle("task:deleteTask", (_event: IpcMainInvokeEvent, id: string) => {
-  return taskDatabase.deleteTask(id);
-});
