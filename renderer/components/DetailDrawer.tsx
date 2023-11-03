@@ -94,7 +94,16 @@ const DetailDrawer: React.FC = () => {
   };
 
   return (
-    <div className={styles.container}>
+    <div
+      className={styles.container}
+      tabIndex={0}
+      onBlur={(e) => {
+        if (e.currentTarget.contains(e.relatedTarget)) {
+          return;
+        }
+        onClose();
+      }}
+    >
       <div className={styles.title}>
         <Checkbox checked={!!task.completedAt} onChange={toggleDone} />
         <Input.TextArea
