@@ -89,6 +89,9 @@ app.on("ready", async () => {
             ? join(__dirname, "../../asset/menuCheckIconTemplate@2x.png")
             : join(__dirname, "../../asset/menuEmptyIconTemplate@2x.png"),
           label: task.title,
+          click: () => {
+            mainWindow.webContents.send("task:openTask", task.id);
+          },
         });
       });
       tray.setContextMenu(Menu.buildFromTemplate(template));

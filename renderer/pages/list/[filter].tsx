@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import "ress";
 import { ConfigProvider, Layout, Space, Typography } from "antd";
 const { Content, Header } = Layout;
@@ -7,8 +7,8 @@ import TaskList from "../../components/TaskList";
 import TaskAddForm from "../../components/TaskAddForm";
 import jaJP from "antd/locale/ja_JP";
 import "dayjs/locale/ja";
-import { useAtomValue } from "jotai";
-import { DrawerOpenAtom } from "../../atoms/atoms";
+import { useAtomValue, useSetAtom } from "jotai";
+import { DrawerOpenAtom, SelectedIdAtom } from "../../atoms/atoms";
 import styles from "../..//styles/Index.module.css";
 import Sidebar from "../../components/Sidebar";
 import { useRouter } from "next/router";
@@ -21,6 +21,8 @@ type Pramas = {
 
 const ListPage: React.FC = () => {
   const router = useRouter();
+  const setSelectedId = useSetAtom(SelectedIdAtom);
+  const setDrawerOpen = useSetAtom(DrawerOpenAtom);
   const { filter } = router.query;
   const params: Pramas =
     filter === "today"
@@ -36,6 +38,15 @@ const ListPage: React.FC = () => {
         };
 
   const drawerOpen = useAtomValue(DrawerOpenAtom);
+
+  useEffect(() => {
+    window.electron.onOpenTask((_event, id) => {
+      setSelectedId(id);
+      setDrawerOpen(true);
+      router.push("/list/today");
+    });
+  }, []);
+
   return (
     <ConfigProvider locale={jaJP}>
       <Header className={styles.header} />

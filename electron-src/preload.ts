@@ -1,6 +1,11 @@
 /* eslint-disable @typescript-eslint/no-namespace */
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-import { ipcRenderer, IpcRenderer, contextBridge } from "electron";
+import {
+  ipcRenderer,
+  IpcRenderer,
+  contextBridge,
+  IpcRendererEvent,
+} from "electron";
 import { Task } from "../renderer/interfaces";
 
 declare global {
@@ -31,6 +36,11 @@ export const API = {
   },
   deleteTask: (id: string): Promise<void> => {
     return ipcRenderer.invoke("task:deleteTask", id);
+  },
+  onOpenTask: (
+    callback: (event: IpcRendererEvent, id: string) => void
+  ): void => {
+    ipcRenderer.on("task:openTask", callback);
   },
 };
 
