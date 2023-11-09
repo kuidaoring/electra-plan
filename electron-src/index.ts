@@ -77,6 +77,7 @@ app.on("ready", async () => {
             { label: "今日のタスクはありません", enabled: false },
           ])
         );
+        tray.setTitle("");
         return;
       }
       const template: Electron.MenuItemConstructorOptions[] = [
