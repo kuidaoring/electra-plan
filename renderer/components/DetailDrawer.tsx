@@ -21,7 +21,7 @@ import {
   DrawerOpenAtom,
   SelectedTaskAtom,
 } from "../atoms/atoms";
-import { useAtomValue, useSetAtom } from "jotai";
+import { useAtom, useAtomValue, useSetAtom } from "jotai";
 import { LexicalComposer } from "@lexical/react/LexicalComposer";
 import { RichTextPlugin } from "@lexical/react/LexicalRichTextPlugin";
 import { LinkPlugin } from "@lexical/react/LexicalLinkPlugin";
@@ -36,24 +36,41 @@ import LinkToolbarItem from "./lexical/LinkToolbarItem";
 
 import styles from "../styles/DetailDrawer.module.css";
 import ClickableLinkPlugin from "./lexical/ClickableLinkPlugin";
-import { useRef } from "react";
+import { useEffect, useRef } from "react";
 import dayjs from "dayjs";
 
 const DetailDrawer: React.FC = () => {
-  const setDrawerOpen = useSetAtom(DrawerOpenAtom);
+  const [drawerOpen, setDrawerOpen] = useAtom(DrawerOpenAtom);
   const setTask = useSetAtom(SelectedTaskAtom);
   const task = useAtomValue(CurrentTaskAtom);
   const deleteTask = useSetAtom(DeleteTaskAtom);
   const titleInputRef = useRef<InputRef>(null);
+  const containerRef = useRef<HTMLDivElement>(null);
+  const containerProp = {
+    className: styles.container,
+    tabIndex: -1,
+    ref: containerRef,
+    onBlur: (e) => {
+      if (e.currentTarget.contains(e.relatedTarget)) {
+        return;
+      }
+      onClose();
+    },
+  };
   if (!task) {
     return (
-      <div className={styles.container}>
+      <div {...containerProp}>
         <div className={styles.empty}>
           <Empty />
         </div>
       </div>
     );
   }
+  useEffect(() => {
+    if (drawerOpen) {
+      containerRef.current.focus();
+    }
+  }, [drawerOpen]);
   const onClose = () => {
     setDrawerOpen(false);
   };
@@ -94,16 +111,7 @@ const DetailDrawer: React.FC = () => {
   };
 
   return (
-    <div
-      className={styles.container}
-      tabIndex={0}
-      onBlur={(e) => {
-        if (e.currentTarget.contains(e.relatedTarget)) {
-          return;
-        }
-        onClose();
-      }}
-    >
+    <div {...containerProp}>
       <div className={styles.title}>
         <Checkbox checked={!!task.completedAt} onChange={toggleDone} />
         <Input.TextArea
