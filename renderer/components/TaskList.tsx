@@ -1,5 +1,5 @@
 import { Empty, List, Tag } from "antd";
-import { Task } from "../interfaces";
+import { Task } from "../model/Task";
 import React, { ReactNode } from "react";
 import { PrimitiveAtom, useAtomValue } from "jotai";
 import { RawTaskListAtom, TaskListAtom } from "../atoms/atoms";

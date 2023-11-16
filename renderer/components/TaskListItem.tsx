@@ -1,6 +1,6 @@
 import { Checkbox, List, Typography } from "antd";
 import { PrimitiveAtom, useAtom, useSetAtom } from "jotai";
-import { Task } from "../interfaces";
+import { Task } from "../model/Task";
 import { DrawerOpenAtom, SelectedIdAtom } from "../atoms/atoms";
 import "dayjs/locale/ja";
 import TaskListItemMeta from "./TaskListItemMeta";

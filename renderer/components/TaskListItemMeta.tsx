@@ -1,11 +1,18 @@
-import { Divider, Space } from "antd";
-import { Task } from "../interfaces";
+import { Divider, Space, Typography } from "antd";
+import {
+  Task,
+  formatDueDate,
+  formatPlanDate,
+  isDueDateExpired,
+  isDueDateToday,
+  isPlanDateExpired,
+  isPlanDateToday,
+} from "../model/Task";
 import {
   CalendarOutlined,
   FileTextOutlined,
   ScheduleOutlined,
 } from "@ant-design/icons";
-import dayjs from "dayjs";
 
 type Props = {
   task: Task;
@@ -18,16 +25,20 @@ const TaskListItemMeta: React.FC<Props> = ({ task }) => {
   return (
     <Space split={<Divider type="vertical" />}>
       {task.planDate && (
-        <Space>
-          <ScheduleOutlined />
-          {dayjs(task.planDate).locale("ja").format("M/D(ddd)")}
-        </Space>
+        <Typography.Text type={getPlanDateType(task)}>
+          <Space>
+            <ScheduleOutlined />
+            {formatPlanDate(task)}
+          </Space>
+        </Typography.Text>
       )}
       {task.dueDate && (
-        <Space>
-          <CalendarOutlined />
-          {dayjs(task.dueDate).locale("ja").format("M/D(ddd)")}
-        </Space>
+        <Typography.Text type={getDueDateType(task)}>
+          <Space>
+            <CalendarOutlined />
+            {formatDueDate(task)}
+          </Space>
+        </Typography.Text>
       )}
       {task.hasDescription && (
         <Space>
@@ -38,4 +49,25 @@ const TaskListItemMeta: React.FC<Props> = ({ task }) => {
     </Space>
   );
 };
+
+const getPlanDateType = (task: Task) => {
+  if (isPlanDateExpired(task)) {
+    return "danger";
+  }
+  if (isPlanDateToday(task)) {
+    return "warning";
+  }
+  return "secondary";
+};
+
+const getDueDateType = (task: Task) => {
+  if (isDueDateExpired(task)) {
+    return "danger";
+  }
+  if (isDueDateToday(task)) {
+    return "warning";
+  }
+  return "secondary";
+};
+
 export default TaskListItemMeta;

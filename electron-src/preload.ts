@@ -6,7 +6,7 @@ import {
   contextBridge,
   IpcRendererEvent,
 } from "electron";
-import { Task } from "../renderer/interfaces";
+import { Task } from "../renderer/model/Task";
 
 declare global {
   namespace NodeJS {

@@ -19,15 +19,3 @@ export type User = {
   id: number;
   name: string;
 };
-
-export type Task = {
-  id: string;
-  title: string;
-  dueDate?: Date;
-  planDate?: Date;
-  completedAt?: Date;
-  description?: string;
-  hasDescription: boolean;
-  archivedAt?: Date;
-  createdAt: Date;
-};

@@ -1,5 +1,5 @@
 import { PrimitiveAtom, atom } from "jotai";
-import { Task } from "../interfaces";
+import { Task } from "../model/Task";
 
 const createTaskAtom = (task: Task) => {
   const baseAtom = atom(task);
