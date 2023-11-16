@@ -104,6 +104,8 @@ app.on("ready", async () => {
     }, 100);
   };
 
+  setInterval(updateTray, 1000 * 30);
+
   ipcMain.handle("task:getAllTasks", () => {
     updateTray();
     return taskDatabase.getAllTasks();
