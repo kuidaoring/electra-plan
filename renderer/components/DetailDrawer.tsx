@@ -57,6 +57,11 @@ const DetailDrawer: React.FC = () => {
       onClose();
     },
   };
+  useEffect(() => {
+    if (drawerOpen) {
+      containerRef.current.focus();
+    }
+  }, [drawerOpen]);
   if (!task) {
     return (
       <div {...containerProp}>
@@ -66,11 +71,6 @@ const DetailDrawer: React.FC = () => {
       </div>
     );
   }
-  useEffect(() => {
-    if (drawerOpen) {
-      containerRef.current.focus();
-    }
-  }, [drawerOpen]);
   const onClose = () => {
     setDrawerOpen(false);
   };
