@@ -3,6 +3,7 @@
   overflow: scroll;
   padding-right: 10px;
   padding-bottom: 40px;
+  outline: none;
 }
 
 .empty {
