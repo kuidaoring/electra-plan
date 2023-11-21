@@ -41,11 +41,13 @@ const isDateExpired = (date: Date) => {
 };
 
 export const isPlanDateToday = (task: Task) => {
-  return task.planDate ? isDateToday(task.planDate) : false;
+  return !task.completedAt && task.planDate
+    ? isDateToday(task.planDate)
+    : false;
 };
 
 export const isDueDateToday = (task: Task) => {
-  return task.dueDate ? isDateToday(task.dueDate) : false;
+  return !task.completedAt && task.dueDate ? isDateToday(task.dueDate) : false;
 };
 
 const isDateToday = (date: Date) => {
